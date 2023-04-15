@@ -1,35 +1,29 @@
-
-
 from tkinter import Label
 from tkinter.ttk import Combobox
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Ui.Settings.UiSettings import UiSettings
 
+
 class SerialConnectionView(InternalWindow):
 	def __init__(self, root, window_bar):
-		
 		UiSettings.get_int_value("test")
-		
 		super().__init__(root, window_bar)
 		self.rename("Serial Connection")
 		self.buildView()
 
-
 	def buildView(self):
-		w = Label(self._frame , text="port")
-		w.place(x=20, y = 50, width = 60, height= 20)
-		#w.pack()
+		w = Label(self._frame, text="port")
+		w.place(x=20, y=50, width=60, height=20)
+		# w.pack()
 
+		comboExample = Combobox(self._frame,
+								values=[
+									"January",
+									"February",
+									"March",
+									"April"])
 
-		comboExample = Combobox(self._frame, 
-                            values=[
-                                    "January", 
-                                    "February",
-                                    "March",
-                                    "April"])
-
-		comboExample.place(x=20, y = 70, width = 100, height= 20)
-
+		comboExample.place(x=20, y=70, width=100, height=20)
 
 	def connect():
 		pass
@@ -45,6 +39,7 @@ class SerialConnectionView(InternalWindow):
 
 	def disconnected(self):
 		pass
+
 
 """
 private void buildView()
@@ -111,8 +106,8 @@ public class SerialConnectionView extends DisplayFrame implements RobotConnectio
 	
 	
 	/**
-	 * 
-	 */
+	* 
+	*/
 	private static final long serialVersionUID = -7180743603886059090L;
 
 
@@ -210,9 +205,9 @@ public void connect()
 	else
 	{
 		JOptionPane.showMessageDialog(null,
-			    "unable to connect to port "+connection.getPortName(),
-			    "error",
-			    JOptionPane.ERROR_MESSAGE);
+				"unable to connect to port "+connection.getPortName(),
+				"error",
+				JOptionPane.ERROR_MESSAGE);
 
 	}
 

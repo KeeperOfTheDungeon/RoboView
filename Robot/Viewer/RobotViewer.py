@@ -1,5 +1,3 @@
-
-
 from time import sleep
 
 import tkinter as tk
@@ -11,13 +9,12 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Gui.InternalWindow.WindowState import State
 
 
-
 class RobotViewer:
 
 	def __init__(self, robot):
-		self._frame = ctk.CTk() 
+		self._frame = ctk.CTk()
 		self._frame.title("Spiderbot")
-		
+
 		RobotSettings.set_file_name(robot.get_name() + ".pkl")
 		self._settings_key = self.__class__.__name__
 
@@ -28,23 +25,22 @@ class RobotViewer:
 
 		self._frame.geometry("{}x{}+{}+{}".format(self._width, self._height, self._x_pos, self._y_pos))
 		RobotSettings.load_settings()
-		RobotSettings.set_key(self._settings_key+".x_pos", self._x_pos)
-		RobotSettings.set_key(self._settings_key+".y_pos", self._y_pos)
-		RobotSettings.set_key(self._settings_key+".x_size", self._width)
-		RobotSettings.set_key(self._settings_key+".y_size", self._height)
-		
-		
+		RobotSettings.set_key(self._settings_key + ".x_pos", self._x_pos)
+		RobotSettings.set_key(self._settings_key + ".y_pos", self._y_pos)
+		RobotSettings.set_key(self._settings_key + ".x_size", self._width)
+		RobotSettings.set_key(self._settings_key + ".y_size", self._height)
+
 		ctk.set_appearance_mode("light")
 		self._robot = robot
 		self._window_bar = WindowBar(self._frame)
-		
+
 		self.build_window()
 
 	def build_window(self):
-		
+
 		menu_bar = tk.Menu(self._frame)
- 
-	#	connection_menue and settings_menue are implemented in this class, others in subclass
+
+		# connection_menue and settings_menue are implemented in this class, others in subclass
 		self.make_connection_menue(menu_bar)
 		self.make_data_menu(menu_bar)
 		self.make_control_menu(menu_bar)
@@ -65,25 +61,21 @@ class RobotViewer:
 		self.load_config()
 		pass
 
-
 	def load_config(self):
-			RobotSettings.load_settings()
+		RobotSettings.load_settings()
 
 	def save_config(self):
-			RobotSettings.save_settings()
+		RobotSettings.save_settings()
 
-
-
-	def onOpenConectionWindow(self):
+	# TODO camelcase method
+	def onOpenConectionWindow(self) -> None:
 		self._connectionWindow = SerialConnectionView(self._frame, self._window_bar)
 		self._connectionWindow.draw()
- 
 
 	def make_connection_menue(self, menue_bar):
 		menue = tk.Menu(menue_bar)
 		menue.add_command(label="Serial", command=self.onOpenConectionWindow)
 		menue_bar.add_cascade(label="Connection", menu=menue)
-
 
 	def make_settings_menue(self, menue_bar):
 		menue = tk.Menu(menue_bar)
@@ -94,19 +86,19 @@ class RobotViewer:
 	def check_open_views(self):
 		if self.is_open_view("SerialConnectionView"):
 			self.onOpenConectionWindow()
-		if self.is_open_view("DataHubDataView"): 
+		if self.is_open_view("DataHubDataView"):
 			self.show_data_hub_data()
-		if self.is_open_view("HeadSensorsDataView"): 
+		if self.is_open_view("HeadSensorsDataView"):
 			self.show_head_sensors_data()
-		if self.is_open_view("LegSensorsDataView"): 
+		if self.is_open_view("LegSensorsDataView"):
 			self.show_leg_sensors_data()
-		if self.is_open_view("LegControllersDataView"): 
+		if self.is_open_view("LegControllersDataView"):
 			self.show_leg_controller_data()
-		if self.is_open_view("LegSensorsControlView"): 
+		if self.is_open_view("LegSensorsControlView"):
 			self.show_leg_sensors_control()
-		if self.is_open_view("LegControllersControlView"): 
+		if self.is_open_view("LegControllersControlView"):
 			self.show_leg_controller_control()
-		if self.is_open_view("LegControllerSetupView"): 
+		if self.is_open_view("LegControllerSetupView"):
 			self.show_leg_controller_setup()
 
 	def is_open_view(self, view_name):
@@ -119,8 +111,7 @@ class RobotViewer:
 			RobotSettings.set_key("{}.state".format(view_name), State.CLOSED.value)
 		return state_value == State.INTERNAL.value or state_value == State.MINIMIZED.value
 
-  
-  
+
 """
 protected JMenu makeConnectionMenu()
 {
@@ -129,11 +120,21 @@ protected JMenu makeConnectionMenu()
 	tmpMenu = new JMenu(RobotViewer.MENUE_NAME_CONNECTION);
 
 	
-	tmpMenu.add(makeMenuItem(RobotViewer.LAN_CONNECTION_TEXT, RobotViewer.CMD_SHOW_FRAME+this.addDisplay(LanMasterConnectionView.class.getName())));
-	tmpMenu.add(makeMenuItem(RobotViewer.CONNECTION_TEXT,RobotViewer.CMD_SHOW_FRAME+this.addDisplay(ConnectionView.class.getName())));
-	tmpMenu.add(makeMenuItem(RobotViewer.BLUETOOTH_CONNECTION_TEXT,RobotViewer.CMD_SHOW_FRAME+this.addDisplay(BluetoothConnectionView.class.getName())));	
-	tmpMenu.add(makeMenuItem(RobotViewer.SERIAL_CONNECTION_TEXT,RobotViewer.CMD_SHOW_FRAME+this.addDisplay(SerialConnectionView.class.getName())));	
-	tmpMenu.add(makeMenuItem(RobotViewer.MENUE_VIEW_PACKET_LOG,RobotViewer.CMD_SHOW_FRAME+this.addDisplay(DataPacketLogViewer.class.getName())));
+	tmpMenu.add(makeMenuItem(
+		RobotViewer.LAN_CONNECTION_TEXT,
+		RobotViewer.CMD_SHOW_FRAME+this.addDisplay(LanMasterConnectionView.class.getName())));
+	tmpMenu.add(makeMenuItem(
+		RobotViewer.CONNECTION_TEXT,
+		RobotViewer.CMD_SHOW_FRAME+this.addDisplay(ConnectionView.class.getName())));
+	tmpMenu.add(makeMenuItem(
+		RobotViewer.BLUETOOTH_CONNECTION_TEXT,
+		RobotViewer.CMD_SHOW_FRAME+this.addDisplay(BluetoothConnectionView.class.getName())));	
+	tmpMenu.add(makeMenuItem(
+		RobotViewer.SERIAL_CONNECTION_TEXT,
+		RobotViewer.CMD_SHOW_FRAME+this.addDisplay(SerialConnectionView.class.getName())));	
+	tmpMenu.add(makeMenuItem(
+		RobotViewer.MENUE_VIEW_PACKET_LOG,
+		RobotViewer.CMD_SHOW_FRAME+this.addDisplay(DataPacketLogViewer.class.getName())));
 	
 	tmpMenu.add(this.makeDataPacketFilterMenu());
 	
@@ -173,8 +174,6 @@ filemenu.add_command(label="Exit")"""
 	
 	InputDeviceDiscoverer.discoverJoysticks();
 """
-
-
 
 '''
 package de.hska.lat.robot.viewer;
@@ -240,8 +239,8 @@ MenuListener, WindowListener {
 
 
 	/**
-	 * 
-	 */
+	* 
+	*/
 	private static final long serialVersionUID = -7359600953948628400L;
 	
 	
@@ -550,7 +549,8 @@ protected JMenu makeDataPacketFilterMenu()
 	
 	tmpMenu = new JMenu(RobotViewer.MENUE_FILTER);
 	
-	tmpMenu.add(makeMenuItem(RobotViewer.EDIT_TEXT, RobotViewer.CMD_SHOW_FRAME+this.addDisplay(DataPacketFilterEditor.class.getName())));
+	tmpMenu.add(makeMenuItem(RobotViewer.EDIT_TEXT,
+				RobotViewer.CMD_SHOW_FRAME+this.addDisplay(DataPacketFilterEditor.class.getName())));
 
 	return(tmpMenu);
 }
@@ -646,11 +646,11 @@ protected JMenu makeValueMenu()
 }
 
 /*
- * 	protected static final String MENUE_NAME_VALUE = "value";
+* 	protected static final String MENUE_NAME_VALUE = "value";
 	protected static final String MENUE_VALUE_RECORDER = "value recorder";
 	protected static final String MENUE_VALUE_GENERATOR = "value generator";
 	protected static final String MENUE_VALUE_SCOPE = "value scope";
- */
+*/
 
 
 
@@ -665,7 +665,8 @@ protected JMenu makeViewMenu(String name,String commandPrefix)
 	{
 	//	if (robot.getDevice(counter).hasView(type))
 		{
-//			tmpMenu.add(makeMenuItem(robot.getDevice(counter).getDeviceName(),commandPrefix+robot.getDevice(counter).getDeviceName()));			
+//			tmpMenu.add(makeMenuItem(robot.getDevice(counter).getDeviceName(),
+						commandPrefix+robot.getDevice(counter).getDeviceName()));			
 		}
 
 	}
@@ -853,7 +854,7 @@ private void viewDisplay(int index)
 		e.printStackTrace();
 	}
 	//displayClass.newInstance();
- catch (InstantiationException e) {
+	catch (InstantiationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} catch (IllegalAccessException e) {
@@ -942,7 +943,7 @@ private void viewFrame(int index)
 		e.printStackTrace();
 	}
 	//displayClass.newInstance();
- catch (InstantiationException e) {
+	catch (InstantiationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} catch (IllegalAccessException e) {
@@ -978,7 +979,6 @@ void showWindowsMenu(JMenu menue)
 		menue.add(makeMenuItem(frames[iCounter].getTitle(),frameName));
 		
 	}
-	 
 
 }
 
@@ -1021,12 +1021,11 @@ void openSavedViews()
 
 
 /**
- * save all open views so they can be reopened on restart
- */
+* save all open views so they can be reopened on restart
+*/
 
 void saveOpenWindows()
-{
-	
+{	
 	int iCounter;
 
 	JInternalFrame[] frames;
@@ -1051,7 +1050,6 @@ void saveOpenWindows()
 		//menue.add(makeMenuItem(frames[iCounter].getTitle(),frameName));
 		
 	}
-	 
 
 }
 
@@ -1066,7 +1064,7 @@ public void actionPerformed(ActionEvent actionEvent)
 	
 	
 	
- if (cmd.startsWith(RobotViewer.CMD_SHOW_FRAME))
+if (cmd.startsWith(RobotViewer.CMD_SHOW_FRAME))
 	{
 		int index;
 		
@@ -1107,8 +1105,7 @@ public void actionPerformed(ActionEvent actionEvent)
 	}
 	
 
- 
- 
+
 	else if (cmd.startsWith("Window_"))
 	{
 		this.showWindow(Integer.parseInt(cmd.substring(7)));

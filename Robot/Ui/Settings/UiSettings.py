@@ -1,33 +1,25 @@
+class UiSettings:
+    _preferences = dict()
 
+    def __init____(self):
 
+        pass
 
+    def get_key_value(self, key):
 
-class UiSettings():
+        return
 
-	_preferences = dict()
+    def get_int_value(key):
 
-	def __init____(self):
-		
-		pass
+        value = 0
 
+        if key in UiSettings._preferences:
+            value = UiSettings._preferences[key]
 
-	def get_key_value(self, key):
-		
-		return
+        if type(value) is not int:
+            value = 0
 
-
-	def get_int_value(key):
-
-		value = 0
-
-		if key in UiSettings._preferences:
-			value = UiSettings._preferences[key]
-
-		if  type(value) is not int:
-			value = 0
-
-		return value
-
+        return value
 
 
 """package de.hska.lat.robot.ui.settings;
