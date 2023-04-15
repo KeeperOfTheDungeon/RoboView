@@ -1,5 +1,6 @@
-from tkinter import Frame, Button, Toplevel
-import customtkinter as ctk
+import tkinter as tk
+
+from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.WindowCloser import WindowCloser
 from RoboView.Gui.InternalWindow.WindowMinimizer import WindowMinimizer
 from RoboView.Gui.InternalWindow.WindowExternalIcon import WindowExternalIcon
@@ -12,13 +13,14 @@ from RoboView.Gui.ExternalWindow.ExternalWindow import ExternalWindow
 
 from RoboView.Gui.InternalWindow.WindowState import State
 from RoboView.Gui.InternalWindow.WindowState import WindowState
+from RoboView.Robot.Viewer.WindowBar import WindowBar
 
 
-class InternalWindow():
+class InternalWindow:
 
-    def __init__(self, name, window_bar):
-
-        self._frame = Frame(bg="gray", borderwidth=1, relief='solid')
+    def __init__(self, root: tk.Frame, name: str, window_bar: WindowBar):
+        self._root = root
+        self._frame = tk.Frame(root, bg="gray", borderwidth=1, relief='solid')
         self._settings_key = self.__class__.__name__
         self._min_width = 200
         self._min_height = 150
@@ -50,15 +52,15 @@ class InternalWindow():
 
         self.handle_window_state()
 
-    def move(self, x_delta, y_delta):
+    def move(self, x_delta: int, y_delta: int) -> None:
         self._frame.lift()
         x = self._frame.winfo_x()
         y = self._frame.winfo_y()
         new_x = x - x_delta
         new_y = y - y_delta
-        if (new_x > 0):
+        if new_x > 0:
             self._x_pos = x - x_delta
-        if (new_y > 0):
+        if new_y > 0:
             self._y_pos = y - y_delta
 
         self._frame.place(x=self._x_pos, y=self._y_pos)
@@ -66,13 +68,13 @@ class InternalWindow():
         RobotSettings.set_key(self._settings_key + ".x_pos", x)
         RobotSettings.set_key(self._settings_key + ".y_pos", y)
 
-    def rename(self, new_name):
+    def rename(self, new_name: str) -> None:
         self._title.rename(new_name)
 
-    def draw(self):
+    def draw(self) -> None:
         self.resize_window()
 
-    def resize(self, width, height):
+    def resize(self, width: int, height: int) -> None:
 
         if width < self._min_width:
             self._width = self._min_width
@@ -90,10 +92,11 @@ class InternalWindow():
 
         self.resize_window()
 
-    def resize_window(self):
+    def resize_window(self) -> None:
         self._frame.lift()
         self._frame.update()
 
+        # FIXME canvas shouldn't be protected if we are mutating it here
         self._title._canvas.place(height=30, width=self._width - 27, x=0, y=0)
         self._resizer._canvas.place(
             height=22, width=22, x=self._width - 24, y=self._height - 24)
@@ -106,33 +109,36 @@ class InternalWindow():
         self._min_height = new_min_y
         # toDo auto resize !
 
-    def close(self, event):
+    # FIXME what does event do here?
+    def close(self, _event) -> None:
         self._frame.place_forget()
         self._frame.destroy()
         self._state.state(State.CLOSED)
         del self
 
-    def set_robot(self, robot):
+    def set_robot(self, robot: AbstractRobot) -> bool:
         return True
 
-    def extract_window(self):
+    def extract_window(self) -> None:
+        raise NotImplementedError("Can't extract the window as the object has no ._device parameter.")
         self.hide_window()
+        # FIXME which device ?
         self._external_window = ExternalWindow(self, self._device)
         self._state.state(State.EXTERNAL)
 
-    def hide_window(self):
+    def hide_window(self) -> None:
         self._frame.place(x=-10000, y=-10000)
 
-    def show_window(self):
+    def show_window(self) -> None:
         self._frame.place(x=self._x_pos, y=self._y_pos)
         self._state.state(State.INTERNAL)
 
-    def minimize_window(self):
+    def minimize_window(self) -> None:
         self.hide_window()
         self._window_bar.add_window(self)
         self._state.state(State.MINIMIZED)
 
-    def handle_window_state(self):
+    def handle_window_state(self) -> None:
         if self._state.isState(State.INIT_MINIMIZED.value):
             self.minimize_window()
         else:

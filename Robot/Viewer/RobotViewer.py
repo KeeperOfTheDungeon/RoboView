@@ -1,6 +1,9 @@
-from time import sleep
+from abc import abstractmethod
+# from time import sleep
 
 import tkinter as tk
+from typing import Optional
+
 import customtkinter as ctk
 
 from RoboView.Robot.Connection.Serial.SerialConnectionView import SerialConnectionView
@@ -8,10 +11,12 @@ from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Gui.InternalWindow.WindowState import State
 
+from RoboControl.Robot.Robot import Robot
+
 
 class RobotViewer:
 
-	def __init__(self, robot):
+	def __init__(self, robot: Robot):
 		self._frame = ctk.CTk()
 		self._frame.title("Spiderbot")
 
@@ -34,10 +39,10 @@ class RobotViewer:
 		self._robot = robot
 		self._window_bar = WindowBar(self._frame)
 
+		self._connectionWindow: Optional[SerialConnectionView] = None
 		self.build_window()
 
-	def build_window(self):
-
+	def build_window(self) -> None:
 		menu_bar = tk.Menu(self._frame)
 
 		# connection_menue and settings_menue are implemented in this class, others in subclass
@@ -59,12 +64,13 @@ class RobotViewer:
 		"""
 
 		self.load_config()
-		pass
 
-	def load_config(self):
+	@staticmethod
+	def load_config() -> None:
 		RobotSettings.load_settings()
 
-	def save_config(self):
+	@staticmethod
+	def save_config() -> None:
 		RobotSettings.save_settings()
 
 	# TODO camelcase method
@@ -72,18 +78,48 @@ class RobotViewer:
 		self._connectionWindow = SerialConnectionView(self._frame, self._window_bar)
 		self._connectionWindow.draw()
 
-	def make_connection_menue(self, menue_bar):
+	def make_connection_menue(self, menue_bar: tk.Menu) -> None:
 		menue = tk.Menu(menue_bar)
 		menue.add_command(label="Serial", command=self.onOpenConectionWindow)
 		menue_bar.add_cascade(label="Connection", menu=menue)
 
-	def make_settings_menue(self, menue_bar):
+	def make_settings_menue(self, menue_bar: tk.Menu) -> None:
 		menue = tk.Menu(menue_bar)
 		menue.add_command(label="Load desktop", command=self.load_config)
 		menue.add_command(label="Save desktop", command=self.save_config)
 		menue_bar.add_cascade(label="Settings", menu=menue)
 
-	def check_open_views(self):
+	@abstractmethod
+	def make_data_menu(self, menu_bar: tk.Menu) -> None: pass
+
+	@abstractmethod
+	def make_control_menu(self, menu_bar: tk.Menu) -> None: pass
+
+	@abstractmethod
+	def make_setup_menu(self, menu_bar: tk.Menu) -> None: pass
+
+	@abstractmethod
+	def show_data_hub_data(self) -> None: pass
+
+	@abstractmethod
+	def show_head_sensors_data(self) -> None: pass
+
+	@abstractmethod
+	def show_leg_sensors_data(self) -> None: pass
+
+	@abstractmethod
+	def show_leg_controller_data(self) -> None: pass
+
+	@abstractmethod
+	def show_leg_sensors_control(self) -> None: pass
+
+	@abstractmethod
+	def show_leg_controller_control(self) -> None: pass
+
+	@abstractmethod
+	def show_leg_controller_setup(self) -> None: pass
+
+	def check_open_views(self) -> None:
 		if self.is_open_view("SerialConnectionView"):
 			self.onOpenConectionWindow()
 		if self.is_open_view("DataHubDataView"):
@@ -101,7 +137,8 @@ class RobotViewer:
 		if self.is_open_view("LegControllerSetupView"):
 			self.show_leg_controller_setup()
 
-	def is_open_view(self, view_name):
+	@staticmethod
+	def is_open_view(view_name: str) -> bool:
 		state_value = RobotSettings.get_int("{}.state".format(view_name))
 		if state_value == State.INTERNAL.value:
 			RobotSettings.set_key("{}.state".format(view_name), State.INIT_INTERNAL.value)

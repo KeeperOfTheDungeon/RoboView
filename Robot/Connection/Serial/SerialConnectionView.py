@@ -1,17 +1,21 @@
 from tkinter import Label
 from tkinter.ttk import Combobox
+
+from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Ui.Settings.UiSettings import UiSettings
+from RoboView.Robot.Viewer.WindowBar import WindowBar
 
 
 class SerialConnectionView(InternalWindow):
-	def __init__(self, root, window_bar):
-		UiSettings.get_int_value("test")
+	def __init__(self, root: str, window_bar: WindowBar):
+		# UiSettings.get_int_value("test")
 		super().__init__(root, window_bar)
 		self.rename("Serial Connection")
 		self.buildView()
 
-	def buildView(self):
+	# FIXME camelCase
+	def buildView(self) -> None:
 		w = Label(self._frame, text="port")
 		w.place(x=20, y=50, width=60, height=20)
 		# w.pack()
@@ -25,19 +29,21 @@ class SerialConnectionView(InternalWindow):
 
 		comboExample.place(x=20, y=70, width=100, height=20)
 
-	def connect():
+	def connect(self) -> None:
 		pass
 
-	def disconnect():
+	def disconnect(self) -> None:
 		pass
 
-	def set_robot(self, robot):
+	def set_robot(self, robot: AbstractRobot) -> bool:
 		pass
 
-	def connected(self):
+	# FIXME this should be renamed to on_* for consistency
+	def connected(self) -> None:
 		pass
 
-	def disconnected(self):
+	# FIXME this should be renamed to on_* for consistency
+	def disconnected(self) -> None:
 		pass
 
 
