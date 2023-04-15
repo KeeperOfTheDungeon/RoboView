@@ -107,7 +107,7 @@ class InternalWindow:
     def set_min_dimension(self, new_min_x, new_min_y):
         self._min_width = new_min_x
         self._min_height = new_min_y
-        # toDo auto resize !
+        self.resize(self._width, self._height)
 
     # FIXME what does event do here?
     def close(self, _event) -> None:
