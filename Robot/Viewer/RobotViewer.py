@@ -6,6 +6,7 @@ from typing import Optional
 
 import customtkinter as ctk
 
+from RoboControl.Com.Connection.SerialConnection import SerialConnection
 from RoboView.Robot.Connection.Serial.SerialConnectionView import SerialConnectionView
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar
@@ -76,6 +77,7 @@ class RobotViewer:
 	# TODO camelcase method
 	def onOpenConectionWindow(self) -> None:
 		self._connectionWindow = SerialConnectionView(self._frame, self._window_bar)
+		self._connectionWindow.set_robot(self._robot)
 		self._connectionWindow.draw()
 
 	def make_connection_menue(self, menue_bar: tk.Menu) -> None:
@@ -120,7 +122,7 @@ class RobotViewer:
 	def show_leg_controller_setup(self) -> None: pass
 
 	def check_open_views(self) -> None:
-		if self.is_open_view("SerialConnectionView"):
+		if self.is_open_view("SerialConnectionView") and SerialConnection.get_ports():
 			self.onOpenConectionWindow()
 		if self.is_open_view("DataHubDataView"):
 			self.show_data_hub_data()

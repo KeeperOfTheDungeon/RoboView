@@ -1,3 +1,5 @@
+# FIXME is this obsolete ?
+
 class UiSettings:
     _preferences = dict()
 
