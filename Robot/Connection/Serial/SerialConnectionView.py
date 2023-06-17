@@ -1,10 +1,10 @@
 import traceback
-
-import customtkinter as ctk
 from tkinter import messagebox
 
-from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
+import customtkinter as ctk
+
 from RoboControl.Com.Connection.SerialConnection import SerialConnection
+from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar
@@ -103,7 +103,7 @@ class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements R
         selected_port = self.port_selector.get()
         try:
             self.connection.set_port(selected_port)
-            # self.connection.set_data_packat_logger(self._robot.get_data_packet_logger())
+            self.connection.set_data_packet_logger(self._robot.get_data_packet_logger())
             self._robot.connect(self.connection)
             self.connected(self._robot)
         except Exception as e:
@@ -131,7 +131,7 @@ class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements R
         self.disconnected(self._robot)
 
     # TODO this should be renamed to on_* for consistency
-    def disconnected(self, robot: AbstractRobot) -> None:
+    def disconnected(self, _robot: AbstractRobot) -> None:
         self.connector.configure(text=SerialConnectionView.CONNECT_TEXT, command=self.connect)
         self.pinger.configure(state="disabled")
 

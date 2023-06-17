@@ -13,12 +13,14 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Gui.InternalWindow.WindowState import State
 
 from RoboControl.Robot.Robot import Robot
+from RoboView.Robot.dataPacketLogger.viewer.DataPacketLogViewer import DataPacketLogView
+from RoboView.Robot.dataPacketLogger.viewer.DataPacketFilterEditor import DataPacketFilterEditor
 
 
 class RobotViewer:
 
     def __init__(self, robot: Robot):
-        self._frame = ctk.CTk()
+        self._frame: ctk.CTk | ctk.CTkFrame = ctk.CTk()
         self._frame.title("Spiderbot")
 
         RobotSettings.set_file_name(robot.get_name() + ".pkl")
@@ -41,6 +43,7 @@ class RobotViewer:
         self._window_bar = WindowBar(self._frame)
 
         self._connectionWindow: Optional[SerialConnectionView] = None
+        self._packet_logger_window: Optional[DataPacketLogView] = None
         self.build_window()
 
     def build_window(self) -> None:
@@ -80,9 +83,26 @@ class RobotViewer:
         self._connectionWindow.set_robot(self._robot)
         self._connectionWindow.draw()
 
+    def on_open_packet_logger_window(self) -> None:
+        self._packet_logger_window = DataPacketLogView(self._frame, self._window_bar)
+        self._packet_logger_window.set_robot(self._robot)
+        self._packet_logger_window.draw()
+
+    def on_open_packet_filter_window(self) -> None:
+        self._packet_logger_window = DataPacketFilterEditor(self._frame, self._window_bar)
+        self._packet_logger_window.set_robot(self._robot)
+        self._packet_logger_window.draw()
+
+    def make_filter_menu(self, parent) -> tk.Menu:
+        menu = tk.Menu(parent)
+        menu.add_command(label="Filter", command=self.on_open_packet_filter_window)
+        return menu
+
     def make_connection_menue(self, menue_bar: tk.Menu) -> None:
         menue = tk.Menu(menue_bar)
         menue.add_command(label="Serial", command=self.onOpenConectionWindow)
+        menue.add_command(label="Packet Log", command=self.on_open_packet_logger_window)
+        menue.add_cascade(label="Filter", menu=self.make_filter_menu(menue))
         menue_bar.add_cascade(label="Connection", menu=menue)
 
     def make_settings_menue(self, menue_bar: tk.Menu) -> None:
