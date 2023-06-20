@@ -48,7 +48,9 @@ class DataPacketLogView(InternalWindow, DataPacketLoggerEvent):
         main.grid_columnconfigure(0, weight=1)
         main.grid_rowconfigure(1, weight=1)
 
-        self._toolbar = PacketLoggerToolbar(main)
+        self._table_model = DataPacketTableModel()
+
+        self._toolbar = PacketLoggerToolbar(main, on_dump=self._table_model.dump_csv)
         self._toolbar.grid_propagate(False)
         self._toolbar.configure(height=PacketLoggerToolbar.HEIGHT)  # setPreferredSize set_min_dimension
         self._toolbar.grid(row=0, sticky="nwe")
@@ -56,7 +58,6 @@ class DataPacketLogView(InternalWindow, DataPacketLoggerEvent):
         form = ctk.CTkFrame(fg_color="transparent", master=main)
         form.grid(row=1, sticky="nsew", pady=10)
 
-        self._table_model = DataPacketTableModel()
         table = ttk.Treeview(master=form,
                              columns=self._table_model.COLUMNS,
                              selectmode="extended", show="headings", padding=5)

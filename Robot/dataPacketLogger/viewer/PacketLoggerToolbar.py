@@ -15,7 +15,7 @@ from RoboView.Robot.Ui.utils.colors import Color
 class PacketLoggerToolbar(ctk.CTkFrame):
     HEIGHT = 80
 
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, *args, on_dump = None, **kwargs):
         super().__init__(master=master, *args, **kwargs)
         # TODO why does this have a title?
         # self.rename("Toolbar")
@@ -23,6 +23,8 @@ class PacketLoggerToolbar(ctk.CTkFrame):
 
         self._data_width = tk.Variable(master, value=DisplayDataWidth_e.WIDTH_8)
         self._display_format = tk.Variable(master, value=DisplayFormat_e.DECIMAL)
+
+        self.on_dump = on_dump
 
     @staticmethod
     def make_panel(panel: ctk.CTkFrame) -> ctk.CTkFrame:
@@ -80,25 +82,26 @@ class PacketLoggerToolbar(ctk.CTkFrame):
 
     def add_file_panel(self):
         file_panel = self.make_panel(self)
-        ctk.CTkLabel(file_panel, text="File : ").grid(column=0, row=0)
-        btn = self.make_button(file_panel, "select")
+        ctk.CTkLabel(file_panel, text="File: ").grid(column=0, row=0)
+        btn = self.make_button(file_panel, "save...")
         btn.grid(column=0, row=1)
 
         def on_file_select(*_args):
-            _file = tk.filedialog.asksaveasfile(
-                filetypes=[("Log files", "*.log")], defaultextension=".log",
+            if not self.listener:
+                return
+            file = tk.filedialog.asksaveasfile(
+                filetypes=[("CSV files", "*.csv")], defaultextension=".csv",
                 initialdir=os.getcwd()
             )
-            btn.configure(state="disabled")
-            raise ValueError("WIP")
-
+            file.close()
+            self.on_dump(file.name)
         btn.configure(command=on_file_select)
         return file_panel
 
     def add_filter_panel(self):
         filter_panel = self.make_panel(self)
-        ctk.CTkLabel(filter_panel, text="Filter : ").grid(column=0, row=0)
-        btn = self.make_button(filter_panel, "edit")
+        ctk.CTkLabel(filter_panel, text="Filter: ").grid(column=0, row=0)
+        btn = self.make_button(filter_panel, "edit...")
         # TODO implement
         btn.configure(state="disabled")
         btn.grid(column=0, row=1)

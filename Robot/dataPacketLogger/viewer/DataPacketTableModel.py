@@ -1,4 +1,5 @@
 from typing import List, Optional
+import csv
 
 from tkinter import ttk
 import tkinter as tk
@@ -25,7 +26,7 @@ class DataPacketTableModel:
         self._device_list = device_list
 
     def get_column_name(self, column: int) -> str:
-        raise ValueError("WIP")  # return(COLUMNS_NAME [column])
+        raise self.COLUMNS[column]
 
     def get_column_count(self) -> int:
         return len(self.COLUMNS)
@@ -92,6 +93,16 @@ class DataPacketTableModel:
         for example in examples:
             table.insert('', tk.END, values=example)
 
-    # def get_as_raw(self, row: int):
-    #     row: LoggedDataPacket = self._data_packet_logger[row]
-    #     return row.get_data_as_string(self.data_width, False)
+    def get_as_raw(self, row: int):
+        row: LoggedDataPacket = self._data_packet_logger[row]
+        return row.get_data_as_string(self._data_packet_logger.get_standard_data_width(), False)
+
+    def dump_csv(self, filepath: str) -> None:
+        with open(filepath, "w", newline="", encoding="utf-8") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=self.COLUMNS, delimiter=';')
+            writer.writeheader()
+            for row_index, _ in enumerate(self._data_packet_logger):
+                row = {}
+                for column_index in range(0, self.get_column_count()):
+                    row[self.COLUMNS[column_index]] = self.get_value_at(row_index, column_index)
+                writer.writerow(row)
