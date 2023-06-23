@@ -180,3 +180,6 @@ class AllColors:
 class Color:
     DARK_GRAY = AllColors.DARK_GRAY.as_hex()
     BLACK = AllColors.BLACK.as_hex()
+    LIMEGREEN = AllColors.LIMEGREEN.as_hex()
+    PALE_VIOLETRED = AllColors.PALE_VIOLETRED.as_hex()
+    RED = AllColors.RED.as_hex()

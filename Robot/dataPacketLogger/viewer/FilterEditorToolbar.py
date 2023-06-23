@@ -1,57 +1,79 @@
 import customtkinter as ctk
 
 from RoboControl.Com.PacketLogger.filter.DataPacketFilter import DataPacketFilter
-from RoboControl.Com.PacketLogger.filter.DataPacketFilterList import DataPacketFilterList
-from RoboView.Robot.dataPacketLogger.viewer.DataPacketFilterSelector import DataPacketFilterSelector
-from RoboView.Robot.dataPacketLogger.viewer.FilterSelectorNotifier import FilterSelectorNotifier
+from RoboView.Robot.Ui.utils.colors import Color
+from RoboView.Robot.dataPacketLogger.viewer.FilterRuleTableModel import FilterRuleTableModel
 
 
-class FilterEditorToolbar(ctk.CTkOptionMenu):
-    _filter_selector: DataPacketFilterSelector
+class FilterEditorToolbar(ctk.CTkFrame):
+    HEIGHT = 50
 
-    LOAD_TEXT = "load"
-    SAVE_TEXT = "save"
-    NEW_TEXT = "new"
+    def __init__(self, master, *args, table_model: FilterRuleTableModel = None, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        # TODO why does this have a title?
+        # self.rename("Toolbar")
+        self._table_model = table_model
 
-    def __init__(self):
-        raise ValueError("WIP FilterEditorToolbar is not yet implemented")
-        self.rename("Toolbar")
-        self.resize(400, 40)  # setPreferredSize
+        self._active_filter = ctk.StringVar()
+        self._active_filter.set(DataPacketFilter.ALLOW_ALL)
+
         self.build_toolbar()
 
-        _load_button: ctk.CTkButton = None
-        _save_button: ctk.CTkButton = None
-        _new_button: ctk.CTkButton = None
+    @staticmethod
+    def make_panel(panel: ctk.CTkFrame) -> ctk.CTkFrame:
+        frame = ctk.CTkFrame(panel, border_color=Color.DARK_GRAY, border_width=1,
+                             height=FilterEditorToolbar.HEIGHT - 2)
+        frame.grid_configure(padx=(5, 5), pady=(5, 5))
+        frame.grid_rowconfigure(0, pad=5)
+        frame.grid_columnconfigure(0, pad=5)
+        return frame
 
-    def build_toolbar(self) -> None:
-        self._new_button = ctk.CTkButton(self, text=FilterEditorToolbar.NEW_TEXT)
+    @staticmethod
+    def make_button(panel: ctk.CTkFrame, text: str) -> ctk.CTkButton:
+        button_width = 50
+        button_height = 20
+        return ctk.CTkButton(panel, text=text, state="normal", width=button_width, height=button_height)
 
-        def on_action_performed(*_args):
-            # PacketLoggerToolBar.this.getDesktopPane().add(new DataPacketFilterBlockConfigViewer());
-            # PacketLoggerToolBar.this.getParent().add(new DataPacketFilterBlockConfigViewer());
+    def add_control_panel(self) -> ctk.CTkFrame:
+        control_panel = self.make_panel(self)
+        new_button = self.make_button(control_panel, "new")
+        new_button.grid(row=0, column=0)
+        new_button.configure(state="disabled")
+        load_button = self.make_button(control_panel, "load")
+        load_button.configure(state="disabled")
+        load_button.grid(row=0, column=1)
+        save_button = self.make_button(control_panel, "save")
+        save_button.configure(state="disabled")
+        save_button.grid(row=0, column=2)
+
+        def on_new(*_args):
             pass
 
-        # self._new_button.add_action_listener(on_action_performed)
+        def on_load(*_args):
+            pass
 
-        self._load_button = ctk.CTkButton(self, text=FilterEditorToolbar.LOAD_TEXT)
-        # TODO on_action_performed ?
-        # self._load_button.add_action_listener(on_action_performed)
+        def on_save(*_args):
+            pass
 
-        self._save_button = ctk.CTkButton(self, text=FilterEditorToolbar.SAVE_TEXT)
-        # TODO on_action_performed ?
-        # self._save_button.add_action_listener(on_action_performed)
+        new_button.configure(command=on_new)
+        load_button.configure(command=on_load)
+        save_button.configure(command=on_save)
 
-        filters = DataPacketFilterList()
-        f1 = DataPacketFilter()
-        f1.set_name("f1")
-        filters.add(f1)
+        return control_panel
 
-        f2 = DataPacketFilter()
-        f2.set_name("f1")
-        filters.add(f2)
+    def build_toolbar(self) -> None:
+        self.grid_rowconfigure(0, weight=1)
+        values = [f.name for f in self._table_model.all_filters]
+        selector = ctk.CTkComboBox(self, values=values, variable=self._active_filter)
+        selector.grid(row=0, column=0)
+        self.add_control_panel().grid(column=1, row=0)
 
-        self._filter_selector = DataPacketFilterSelector(self, filters)
-        self._filter_selector.resize(200, 30)  # setPreferredSize
+        def on_selected(*_args):
+            self.load_filter()
 
-    def set_selector_listener(self, listener: FilterSelectorNotifier) -> None:
-        self._filter_selector.add_selector_listener(listener)
+        selector.configure(command=on_selected)
+        selector.grid(row=0, column=4)
+
+    def load_filter(self):
+        data_filter = self._table_model.get_filter_by_name(self._active_filter.get())
+        self._table_model.load_filter(data_filter)

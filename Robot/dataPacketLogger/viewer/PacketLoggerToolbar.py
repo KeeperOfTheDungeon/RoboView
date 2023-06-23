@@ -6,11 +6,12 @@ import customtkinter as ctk
 
 from RoboControl.Com.PacketLogger.DataPacketLogger import DataPacketLogger
 from RoboControl.Com.PacketLogger.LoggedDataPacket import DisplayDataWidth_e, DisplayFormat_e
+from RoboControl.Com.PacketLogger.filter.DataPacketFilter import DataPacketFilter
 from RoboView.Robot.Ui.utils.colors import Color
 
 
 class PacketLoggerToolbar(ctk.CTkFrame):
-    HEIGHT = 80
+    HEIGHT = 90
 
     def __init__(self, master, *args, **kwargs):
         super().__init__(master=master, *args, **kwargs)
@@ -91,17 +92,8 @@ class PacketLoggerToolbar(ctk.CTkFrame):
     def add_filter_panel(self):
         filter_panel = self.make_panel(self)
         ctk.CTkLabel(filter_panel, text="Filter: ").grid(column=0, row=0)
-        btn = self.make_button(filter_panel, "edit...")
-        # TODO implement
-        btn.configure(state="disabled")
-        btn.grid(column=0, row=1)
-
-        def on_edit_click(*_args):
-            # TODO ?
-            # DataPacketFilterBlockConfigViewer(self.master).grid(...)
-            raise ValueError("WIP")
-
-        btn.configure(command=on_edit_click)
+        selector = self.make_selector(filter_panel)
+        selector.grid(column=0, row=1)
         return filter_panel
 
     def set_listener(self, listener: DataPacketLogger) -> None:
@@ -189,3 +181,17 @@ class PacketLoggerToolbar(ctk.CTkFrame):
             btn.configure(command=on_format_selected)
 
         return format_panel
+
+    def make_selector(self, master) -> ctk.CTkComboBox:
+        self.grid_rowconfigure(0, weight=1)
+        values = [f.name for f in self.listener.all_filters]
+        active_filter = ctk.StringVar()
+        active_filter.set(DataPacketFilter.ALLOW_ALL)
+        selector = ctk.CTkComboBox(master, values=values, variable=active_filter)
+        selector.grid(row=0, column=0)
+
+        def on_selected(*_args):
+            data_filter = self.listener.get_filter_by_name(active_filter.get())
+            self.listener.filter = data_filter
+        selector.configure(command=on_selected)
+        return selector

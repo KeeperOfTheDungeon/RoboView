@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import ttk
 from typing import Optional
 
@@ -36,7 +35,7 @@ class DataPacketLogView(InternalWindow):
 
     def build_view(self) -> ttk.Treeview:
         self.move(-10, -10)
-        self.set_min_dimension(950, 200)
+        self.set_min_dimension(1300, 400)
 
         main = ctk.CTkFrame(fg_color="transparent", master=self._frame)
         main.pack(fill="both", expand=True,
@@ -98,13 +97,7 @@ class DataPacketLogView(InternalWindow):
         super().close(*args)
 
     def on_change(self) -> None:
-        self.table.delete(*self.table.get_children())
-
-        for row_index in range(self._packet_logger.rows_size):
-            row = []
-            for column_index in range(self._packet_logger.columns_size):
-                row.append(str(self._packet_logger.get_cell(row_index, column_index)))
-            self.table.insert('', tk.END, values=row)
+        self._packet_logger.paint_on_table(self.table)
 
     def set_robot(self, robot: AbstractRobot) -> bool:
         self.rename(robot.get_name() + " " + self.FRAME_NAME)

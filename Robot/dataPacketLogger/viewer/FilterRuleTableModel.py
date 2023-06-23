@@ -1,31 +1,23 @@
-class FilterRuleTableModel:
-    COLUMNS_NAME = ["nr", "timestamp", "type", "direction", "destination", "source", "name", "data"]
+from RoboControl.Com.PacketLogger.DataPacketLogger import DataPacketLogger
+from RoboControl.Com.PacketLogger.filter.DataPacketFilter import DataPacketFilter
 
+
+class FilterRuleTableModel(DataPacketLogger):
     def __init__(self):
-        raise ValueError("WIP FilterRuleTableModel is not yet implemented")
-        self._box: JComboBox[String] = JComboBox()
+        super().__init__()
+        self._data_packet_logger = None
 
-    def get_column_name(self, column: int) -> str:
-        return self.COLUMNS_NAME[column]
+    def set_logger(self, data_packet_logger: DataPacketLogger):
+        self._data_packet_logger = data_packet_logger
 
-    """
-    def get_column_class(self, column: int) -> class:
-        print("get class")
-        return self._box.get_class()
-    """
-
-    def is_cell_editable(self, row_index: int, column_index: int) -> bool:
-        # TODO ??
-        return True
-
-    def get_column_count(self) -> int:
-        # FIXME ??
-        return 3
-
-    def get_row_count(self) -> int:
-        # FIXME ??
-        return 3
-
-    def get_value_at(self, arg0: int, arg1: int) -> object:
-        # FIXME ??
-        raise ValueError("get_value_at for FilterRuleTableModel not yet implemented")
+    def load_filter(self, packet_filter: DataPacketFilter):
+        if self._data_packet_logger:
+            self._data_packet_logger.filter = packet_filter
+        self.is_recording = True
+        self.clear()
+        for rule in packet_filter.get_rules():
+            tag = "green" if rule.is_pass else "red"
+            values = []
+            for column_name in self.column_names:
+                values.append(rule.as_dict().get(column_name))
+            self.add_row(values, tags=[tag])

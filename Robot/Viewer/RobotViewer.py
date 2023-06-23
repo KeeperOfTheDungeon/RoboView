@@ -95,7 +95,7 @@ class RobotViewer:
 
     def make_filter_menu(self, parent) -> tk.Menu:
         menu = tk.Menu(parent)
-        menu.add_command(label="Filter", command=self.on_open_packet_filter_window)
+        menu.add_command(label="Editor", command=self.on_open_packet_filter_window)
         return menu
 
     def make_connection_menue(self, menue_bar: tk.Menu) -> None:
