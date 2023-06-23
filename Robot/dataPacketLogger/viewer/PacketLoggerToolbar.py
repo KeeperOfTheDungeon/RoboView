@@ -1,7 +1,4 @@
-import os
-
 import tkinter as tk
-from tkinter.filedialog import asksaveasfile
 from tkinter.font import Font
 from typing import Optional
 
@@ -15,7 +12,7 @@ from RoboView.Robot.Ui.utils.colors import Color
 class PacketLoggerToolbar(ctk.CTkFrame):
     HEIGHT = 80
 
-    def __init__(self, master, *args, on_dump = None, **kwargs):
+    def __init__(self, master, *args, **kwargs):
         super().__init__(master=master, *args, **kwargs)
         # TODO why does this have a title?
         # self.rename("Toolbar")
@@ -23,8 +20,6 @@ class PacketLoggerToolbar(ctk.CTkFrame):
 
         self._data_width = tk.Variable(master, value=DisplayDataWidth_e.WIDTH_8)
         self._display_format = tk.Variable(master, value=DisplayFormat_e.DECIMAL)
-
-        self.on_dump = on_dump
 
     @staticmethod
     def make_panel(panel: ctk.CTkFrame) -> ctk.CTkFrame:
@@ -62,17 +57,17 @@ class PacketLoggerToolbar(ctk.CTkFrame):
         def on_record(*_args):
             record_button.configure(state="disabled")
             stop_button.configure(state="normal")
-            self.listener.start_recording()
+            self.listener.is_recording = True
 
         def on_stop(*_args):
             record_button.configure(state="normal")
             stop_button.configure(state="disabled")
-            self.listener.stop_recording()
+            self.listener.is_recording = False
 
         def on_clear(*_args):
             if self.listener is None:
                 return
-            self.listener.clear_list()
+            self.listener.clear()
 
         record_button.configure(command=on_record)
         stop_button.configure(command=on_stop)
@@ -89,12 +84,7 @@ class PacketLoggerToolbar(ctk.CTkFrame):
         def on_file_select(*_args):
             if not self.listener:
                 return
-            file = tk.filedialog.asksaveasfile(
-                filetypes=[("CSV files", "*.csv")], defaultextension=".csv",
-                initialdir=os.getcwd()
-            )
-            file.close()
-            self.on_dump(file.name)
+            self.listener.save_as()
         btn.configure(command=on_file_select)
         return file_panel
 
@@ -149,7 +139,6 @@ class PacketLoggerToolbar(ctk.CTkFrame):
             self.add_file_panel(),
             self.add_filter_panel(),
         ]:
-            # FIXME do this better
             panel.grid(row=0, column=cursor)
             cursor += 1
         self.grid_columnconfigure("all", weight=1)
@@ -158,7 +147,7 @@ class PacketLoggerToolbar(ctk.CTkFrame):
         log_size.set(str(DataPacketLogger.DEFAULT_MAX_SIZE))
         log_size_spinner = tk.Spinbox(self, textvariable=log_size,
                                       from_=0, to=1000, increment=1,
-                                      width=4, font=Font(family="Helvetica", size=20)
+                                      width=4, font=Font(family="Helvetica", size=20),
                                       )
         log_size_spinner.grid(row=0, column=cursor, padx=10, pady=10)
 
@@ -168,9 +157,12 @@ class PacketLoggerToolbar(ctk.CTkFrame):
             except ValueError:
                 return  # Invalid input
             if self.listener:
-                self.listener.set_max_size(new_size)
+                self.listener.max_size = new_size
 
-        log_size.trace("w", callback=on_log_size_change)
+        # FIXME if this is enabled, writing left to right loses the logs (1->10->100 etc...)
+        # log_size.trace("w", callback=on_log_size_change)
+        log_size_spinner.configure(command=on_log_size_change)
+        log_size_spinner.bind("<Return>", on_log_size_change)
 
     def update_format(self):
         if self.listener is not None:
