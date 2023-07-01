@@ -38,6 +38,7 @@ class DeviceView(InternalWindow):
         self._tool_bar = ToolBar(self._frame, device)
         self._display = tk.Frame(self._frame, bg="gray", borderwidth=1)
         self._status_bar = StatusBar(self._frame, device)
+        self.set_min_dimension(600, 400)
 
     def resize_window(self):
         InternalWindow.resize_window(self)
