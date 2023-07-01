@@ -1,13 +1,12 @@
-
 from tkinter import Frame, Label, Menu
 import customtkinter as ctk
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 
 
 class ComponentView:
-    def __init__(self, root, name, settings_key,  width, height):
+    def __init__(self, root, name, settings_key, width, height):
 
-        self._settings_key = settings_key+"."+self.__class__.__name__+"."+name
+        self._settings_key = settings_key + "." + self.__class__.__name__ + "." + name
 
         self._frame = Frame(
             master=root, bg="grey15")
@@ -16,17 +15,20 @@ class ComponentView:
         self._height = height
 
         self._data_frame = ctk.CTkFrame(
-            master=self._frame, fg_color="darkgrey", corner_radius=3)
+            master=self._frame,
+            fg_color="darkgrey",
+            corner_radius=3,
+        )
 
-        x_pos = RobotSettings.get_int(self._settings_key+".x_pos")
-        y_pos = RobotSettings.get_int(self._settings_key+".y_pos")
+        x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
+        y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
         self._frame.place(x=x_pos, y=y_pos)
         self._frame.bind("<Button-1>", self.mouse_pressed_frame)
         self._frame.bind("<ButtonRelease-1>", self.mouse_released_frame)
         self._frame.bind("<Leave>", self.mouse_released_frame)
 
         self._display_name = RobotSettings.get_bool(
-            self._settings_key+".display_name")
+            self._settings_key + ".display_name")
 
         self._data_frame.bind("<Button-1>", self.mouse_pressed_data_frame)
         self._data_frame.bind("<ButtonRelease-1>",
@@ -38,7 +40,11 @@ class ComponentView:
         self.build_context_menue()
         self._name = name
         self._name_label = ctk.CTkLabel(
-            self._frame, text=self._name, font=("Courier", 12), fg_color='darkgrey', text_color='black', corner_radius=3)
+            self._frame,
+            text=self._name, font=("Courier", 12),
+            fg_color='darkgrey', text_color='black',
+            corner_radius=3
+        )
         self.draw()
 
     def build_context_menue(self):
@@ -68,8 +74,8 @@ class ComponentView:
         y = y - self._origin_y + event.y
         self._frame.place(x=x, y=y)
 
-        RobotSettings.set_key(self._settings_key+".x_pos", x)
-        RobotSettings.set_key(self._settings_key+".y_pos", y)
+        RobotSettings.set_key(self._settings_key + ".x_pos", x)
+        RobotSettings.set_key(self._settings_key + ".y_pos", y)
 
     def mouse_released_frame(self, event):
         self._frame.unbind("<Motion>")
@@ -98,7 +104,7 @@ class ComponentView:
 
         height = self._height
         width = self._width
-        
+
         if self._display_name:
             self._name_label.place(x=2, y=2, width=self._width, height=18)
             self._frame.place(width=width + 6, height=height + 27)

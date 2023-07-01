@@ -1,4 +1,3 @@
-
 from tkinter import Frame
 import customtkinter as ctk
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
@@ -20,7 +19,6 @@ class DeviceView(InternalWindow):
         self._tool_bar = ToolBar(self._frame, device)
         self._display = Frame(self._frame, bg="gray", borderwidth=1)
         self._status_bar = StatusBar(self._frame, device)
-        
 
     def resize_window(self):
         InternalWindow.resize_window(self)
@@ -38,13 +36,9 @@ class DeviceView(InternalWindow):
         if self._display is not None:
             self._display.place(height=y_size - 90,
                                 width=x_size - 3, x=1, y=65)
-        
-            
 
     def set_robot(self, robot):
         pass
-
-
 
 
 """package de.hska.lat.robot.device.viewer;

@@ -6,7 +6,6 @@ class DataHubDataView(DeviceView):
         super().__init__("Main Data Hub", device, window_bar)
 
 
-
 """package de.hska.lat.robot.device.generic.dataHub.view;
 
 import de.hska.lat.robot.abstractRobot.AbstractRobot;
