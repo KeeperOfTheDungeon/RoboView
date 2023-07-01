@@ -4,12 +4,11 @@ from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 
 
 class ComponentView:
-    def __init__(self, root, name, settings_key, width, height):
+    def __init__(self, root: ctk.CTkFrame, name: str, settings_key: str, width: int, height: int):
 
         self._settings_key = settings_key + "." + self.__class__.__name__ + "." + name
 
-        self._frame = Frame(
-            master=root, bg="grey15")
+        self._frame = ctk.CTkFrame(master=root, bg_color="grey15")
         self._master = root
         self._width = width
         self._height = height
@@ -105,16 +104,18 @@ class ComponentView:
         height = self._height
         width = self._width
 
+        self._name_label.configure(width=self._width, height=18)
+        self._data_frame.configure(width=self._width, height=self._height)
         if self._display_name:
-            self._name_label.place(x=2, y=2, width=self._width, height=18)
-            self._frame.place(width=width + 6, height=height + 27)
-            self._data_frame.place(
-                x=2, y=19, width=self._width, height=self._height)
+            self._name_label.place(x=2, y=2)
+            self._frame.configure(width=width + 6, height=height + 27)
+            self._frame.place()
+            self._data_frame.place(x=2, y=19)
         else:
-            self._name_label.place(x=2, y=-20, width=self._width, height=18)
-            self._frame.place(width=width + 6, height=height + 6)
-            self._data_frame.place(
-                x=2, y=2, width=self._width, height=self._height)
+            self._name_label.place(x=2, y=-20)
+            self._frame.configure(width=width + 6, height=height + 6)
+            self._frame.place()
+            self._data_frame.place(x=2, y=2)
 
 
 """package de.hska.lat.robot.component.view;

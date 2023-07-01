@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
+from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboView.Gui.InternalWindow.WindowCloser import WindowCloser
 from RoboView.Gui.InternalWindow.WindowMinimizer import WindowMinimizer
 from RoboView.Gui.InternalWindow.WindowExternalIcon import WindowExternalIcon
@@ -17,7 +18,6 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 
 
 class InternalWindow:
-
     def __init__(self, root: tk.Frame, name: str, window_bar: WindowBar):
         self._root = root
         self._frame = tk.Frame(root, bg="gray", borderwidth=1, relief='solid')
@@ -51,6 +51,9 @@ class InternalWindow:
         self._state = WindowState(self)
 
         self.handle_window_state()
+
+        # TODO maybe a better solution here
+        self._device = None
 
     def move(self, x_delta: int, y_delta: int) -> None:
         self._frame.lift()
@@ -120,9 +123,7 @@ class InternalWindow:
         return True
 
     def extract_window(self) -> None:
-        raise NotImplementedError("Can't extract the window as the object has no ._device parameter.")
         self.hide_window()
-        # FIXME which device ?
         self._external_window = ExternalWindow(self, self._device)
         self._state.state(State.EXTERNAL)
 

@@ -1,23 +1,42 @@
-from tkinter import Frame
 import customtkinter as ctk
+import tkinter as tk
+
+from RoboControl.Robot.AbstractRobot import AbstractDevice
+from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
+from RoboControl.Robot.AbstractRobot.Config.DeviceConfig import DeviceConfig
+from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Device.Viewer.StatusBar import StatusBar
 from RoboView.Robot.Device.Viewer.ToolBar import ToolBar
+from RoboView.Robot.Ui.utils.colors import Color
+from RoboView.Robot.Viewer.WindowBar import WindowBar
+from RoboView.Robot.component.view.ComponentView import ComponentView
+
+
+class DeviceViewSet(list):
+    pass
 
 
 class DeviceView(InternalWindow):
-    def __init__(self, name, device, window_bar):
+    FRAME_NAME: str = "generic DeviceView"
 
+    def __init__(self, root: ctk.CTkFrame, device: RobotDevice, window_bar: WindowBar):
         self._tool_bar = None
         self._display = None
         self._status_bar = None
         self._device = device
         self._frame = None
 
-        InternalWindow.__init__(self, name, window_bar)
+        super().__init__(root, self.FRAME_NAME, window_bar)
 
+        self._device = device
+
+        # menuBar: JMenuBar
+        # componentPanel: JPanel
+        # toolBarMenue: JCheckBoxMenuItem
+        # statusBarMenue: JCheckBoxMenuItem
         self._tool_bar = ToolBar(self._frame, device)
-        self._display = Frame(self._frame, bg="gray", borderwidth=1)
+        self._display = tk.Frame(self._frame, bg="gray", borderwidth=1)
         self._status_bar = StatusBar(self._frame, device)
 
     def resize_window(self):
@@ -27,15 +46,16 @@ class DeviceView(InternalWindow):
         y_size = self._frame.winfo_height()
 
         if self._status_bar is not None:
-            self._status_bar._frame.place(
-                height=50, width=x_size - 24, x=0, y=y_size - 50)
+            self._status_bar._frame.configure(height=50, width=x_size - 24)
+            self._status_bar._frame.place(x=0, y=y_size - 50)
 
         if self._tool_bar is not None:
-            self._tool_bar._frame.place(height=37, width=x_size, x=0, y=24)
+            self._tool_bar._frame.configure(height=37, width=x_size)
+            self._tool_bar._frame.place(x=0, y=24)
 
         if self._display is not None:
-            self._display.place(height=y_size - 90,
-                                width=x_size - 3, x=1, y=65)
+            self._display.configure(height=y_size - 90, width=x_size - 3)
+            self._display.place(x=1, y=65)
 
     def set_robot(self, robot):
         pass

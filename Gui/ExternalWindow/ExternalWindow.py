@@ -30,12 +30,14 @@ class ExternalWindow():
         
         x_size = self._master._width
         y_size = self._master._height
-        
-        self._status_bar._frame.place(
-                height=50, width=x_size, x=0, y=y_size - 50)
-        self._tool_bar._frame.place(height=37, width=x_size, x=0, y=0)
-        self._display.place(height=y_size - 90,
-                               width=x_size - 3, x=1, y=65)
+
+        self._status_bar._frame.configure(height=50, width=x_size)
+        self._status_bar._frame.place(x=0, y=y_size - 50)
+        self._tool_bar._frame.configure(height=37, width=x_size)
+        self._tool_bar._frame.place(x=0, y=0)
+        self._display.configure(height=y_size - 90,
+                               width=x_size - 3)
+        self._display.place(x=1, y=65)
         
         
     def on_close(self):

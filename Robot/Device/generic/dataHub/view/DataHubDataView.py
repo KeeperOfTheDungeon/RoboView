@@ -1,9 +1,15 @@
+import customtkinter as ctk
+
+from RoboControl.Robot.Device.Generic.DataHub.DataHub import DataHub
+from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Robot.Device.Viewer.DeviceView import DeviceView
 
 
 class DataHubDataView(DeviceView):
-    def __init__(self, device, window_bar):
-        super().__init__("Main Data Hub", device, window_bar)
+    FRAME_NAME: str = "Main Data Hub"
+
+    def __init__(self, root: ctk.CTkFrame, device: DataHub, window_bar: WindowBar):
+        super().__init__(root, device, window_bar)
 
 
 """package de.hska.lat.robot.device.generic.dataHub.view;
