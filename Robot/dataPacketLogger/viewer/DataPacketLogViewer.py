@@ -45,7 +45,7 @@ class DataPacketLogView(InternalWindow):
         main.grid_columnconfigure(0, weight=1)
         main.grid_rowconfigure(1, weight=1)
 
-        self._packet_logger = DataPacketLogger()
+        self._packet_logger = DataPacketLogger()  # dummy logger
 
         self._toolbar = PacketLoggerToolbar(main)
         self._toolbar.grid_propagate(False)
@@ -92,17 +92,15 @@ class DataPacketLogView(InternalWindow):
 
     def close(self, *args) -> None:
         self.save_column_width()
-        # TODO do this better
-        self.on_logger_change = lambda *x: x
         super().close(*args)
 
     def on_change(self) -> None:
-        self._packet_logger.paint_on_table(self.table)
+        if self.table.winfo_exists():
+            self._packet_logger.paint_on_table(self.table)
 
     def set_robot(self, robot: AbstractRobot) -> bool:
         self.rename(robot.get_name() + " " + self.FRAME_NAME)
         self._packet_logger = robot.get_data_packet_logger()
-        self._packet_logger.set_device_list(robot.get_device_list())
         self._toolbar.set_listener(self._packet_logger)
         self._packet_logger.add_listener(self)
         self.on_change()
