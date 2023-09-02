@@ -1,4 +1,3 @@
-
 from tkinter import Label
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
@@ -9,31 +8,26 @@ class ServoDataView(SensorDataView):
 
     def __init__(self, root, servo, settings_key):
         super().__init__(root, servo, settings_key, width=100, height=20)
-        self._value_label = Label(
-            self._data_frame, text="", font=("Courier", 12))
-        self._value_label.place(x=10, y=2,  width=80, height=15)
+        self._value_label = Label(self._data_frame, text="", font=("Courier", 12))
+        self._value_label.place(x=10, y=2, width=80, height=15)
 
         self._value = self._sensor.get_position_value()
         self._value.add_listener(self.servo_position_changed)
 
     def create_view(root, servo, settings_key):
-
         if servo is not None:
             view = ServoDataView(root, servo, settings_key)
         else:
             view = MissingComponentView(DistanceSensor.__name__)
-
         return view
 
     def servo_position_changed(self):
-
         if self._value.is_valid():
             string = "{:.1f}".format(self._value.get_value_as_degree())
             # str()
             string += " °"
         else:
             string = "- °"
-
         self._value_label['text'] = string
 
 

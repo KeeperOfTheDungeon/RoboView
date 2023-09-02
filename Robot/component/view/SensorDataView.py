@@ -1,4 +1,3 @@
-
 from RoboView.Robot.component.view.ComponentView import ComponentView
 
 
@@ -9,7 +8,6 @@ class SensorDataView(ComponentView):
         # self._name = sensor.get_name()
 
     def value_changed(self):
-
         pass
 
     # refresh fehlt
