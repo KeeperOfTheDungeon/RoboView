@@ -21,24 +21,19 @@ class ToolBar:
         self._device.remote_ping_device()
 
     def build_view(self):
-
-        self._period = Spinbox(self._frame, step_size=10,
-                               height=20, corner_radius=5, fg_color='grey60') #fg_color='#565b5e'
+        self._period = Spinbox(self._frame, step_size=10, height=20, corner_radius=5, fg_color='#565b5e')
         self._period.set(1000)
         self._period.pack(side=LEFT)
 
-        aquisators = self._device.get_data_aquisators()
-        self._aquisators = ctk.CTkComboBox(self._frame,
-                                           values=aquisators, height=25)
-
+        self._aquisators = ctk.CTkComboBox(self._frame, values=self._all_aquisators, height=25)
         self._aquisators.pack(side=LEFT)
 
-        button = ctk.CTkButton(self._frame, text="On", width=30,
-                               height=25, corner_radius=5, command=self.start_stream)
+        button = ctk.CTkButton(self._frame, text="On", width=30, height=25, corner_radius=5)
+        button.configure(command=self.start_stream)
         button.pack(side=LEFT)
 
-        button = ctk.CTkButton(self._frame, text="Off", width=30,
-                               height=25, corner_radius=5, command=self.stop_stream)
+        button = ctk.CTkButton(self._frame, text="Off", width=30, height=25, corner_radius=5)
+        button.configure(command=self.stop_stream)
         button.pack(side=LEFT)
 
         self._frame.bind("<ButtonRelease-3>", self.mouse_released)
@@ -82,11 +77,14 @@ class ToolBar:
         self._device.remote_load_streams()
         pass
 
+    def _get_selection_index(self) -> int:
+        selection = self._aquisators.get()
+        return self._all_aquisators.index(selection)
+
     def start_stream(self):
-        print(self._aquisators.current())
-        index = self._aquisators.current() + 1
+        index = self._get_selection_index() + 1
         self._device.remote_start_stream(index, int(int(self._period.get())/10))
 
     def stop_stream(self):
-        index = self._aquisators.current() + 1
+        index = self._get_selection_index() + 1
         self._device.remote_stop_stream(index)

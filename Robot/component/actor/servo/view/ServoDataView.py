@@ -14,6 +14,7 @@ class ServoDataView(SensorDataView):
         self._value = self._sensor.get_position_value()
         self._value.add_listener(self.servo_position_changed)
 
+    @staticmethod
     def create_view(root, servo, settings_key):
         if servo is not None:
             view = ServoDataView(root, servo, settings_key)
