@@ -49,9 +49,11 @@ class ComponentView:
     def build_context_menue(self):
         self._context_menue = Menu(self._frame, tearoff=0)
         self._context_menue.add_command(
-            label="display name", command=self.on_display_name)
+            label="display name", command=self.on_display_name
+        )
         self._context_menue.add_command(
-            label="lock position", command=self.on_lock_position)
+            label="lock position", command=self.on_lock_position
+        )
         self._context_menue.add_separator()
 
     def mouse_pressed(self, event):
@@ -98,6 +100,12 @@ class ComponentView:
         RobotSettings.set_key(self._settings_key +
                               ".display_name", self._display_name)
         self.draw()
+
+    def get_view_width(self) -> int:
+        return self._width
+
+    def get_view_height(self) -> int:
+        return self._height
 
     def draw(self):
 

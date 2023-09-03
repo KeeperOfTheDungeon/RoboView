@@ -1,26 +1,82 @@
+import tkinter
 from tkinter import Label
+import customtkinter as ctk
+
+from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
 
 
 class ServoDataView(SensorDataView):
+    def __init__(self, root, servo: Servo, settings_key):
+        super().__init__(root, servo, settings_key, width=160, height=90)
+        self.build_view()
 
-    def __init__(self, root, servo, settings_key):
-        super().__init__(root, servo, settings_key, width=100, height=20)
-        self._value_label = Label(self._data_frame, text="", font=("Courier", 12))
-        self._value_label.place(x=10, y=2, width=80, height=15)
+    def build_view(self) -> None:
+        # super().build_view()
 
-        self._value = self._sensor.get_position_value()
-        self._value.add_listener(self.servo_position_changed)
+        self._value = self._sensor.get_position()
+        # self._value.add_listener(self.servo_position_changed)
+
+        insets_left = 0
+        insets_top = 0
+        form = ctk.CTkFrame(fg_color="transparent", master=self._frame, width=160, height=110)
+        form.grid_rowconfigure("all", weight=1)
+        form.pack(fill="both", expand=True,
+                  ipadx=5, ipady=5)
+
+        position_label = ctk.CTkLabel(master=form, text="position")
+        position_label.configure(width=50, height=20)
+        position_label.place(x=insets_left + 5, y=insets_top + 5)
+
+        self._value_label = ctk.CTkLabel(master=form, text="--")  # centered # black border
+        self._value_label.configure(width=40, height=20)
+        self._value_label.place(x=insets_left + 60, y=insets_top + 5)
+
+        self._at_min_flag = ctk.CTkCheckBox(master=form, text="min", command=print)
+        self._at_min_flag.configure(width=60, height=20)
+        self._at_min_flag.place(x=insets_left + 5, y=insets_top + 35)
+        self._at_min_flag.configure(state=tkinter.DISABLED)
+
+        self._at_max_flag = ctk.CTkCheckBox(master=form, text="max", command=print)
+        self._at_max_flag.configure(width=60, height=20)
+        self._at_max_flag.place(x=insets_left + 85, y=insets_top + 35)
+        self._at_max_flag.configure(state=tkinter.DISABLED)
+
+        self._active_flag = ctk.CTkCheckBox(master=form, text="active", command=print)
+        self._active_flag.configure(width=60, height=20)
+        self._active_flag.place(x=insets_left + 5, y=insets_top + 60)
+        self._active_flag.configure(state=tkinter.DISABLED)
+
+        self._inverse_flag = ctk.CTkCheckBox(master=form, text="inverse", command=print)
+        self._inverse_flag.configure(width=70, height=20)
+        self._inverse_flag.place(x=insets_left + 5, y=insets_top + 85)
+        self._inverse_flag.configure(state=tkinter.DISABLED)
+
+        self._stall_flag = ctk.CTkCheckBox(master=form, text="stall", command=print)
+        self._stall_flag.configure(width=60, height=20)
+        self._stall_flag.place(x=insets_left + 85, y=insets_top + 85)
+        self._stall_flag.configure(state=tkinter.DISABLED)
+
+        self._is_on_flag = ctk.CTkCheckBox(master=form, text="on", command=print)
+        self._is_on_flag.configure(width=60, height=20)
+        self._is_on_flag.place(x=insets_left + 85, y=insets_top + 60)
+        self._is_on_flag.configure(state=tkinter.DISABLED)
 
     @staticmethod
     def create_view(root, servo, settings_key):
+        """
+        "creates new servo data view and link it given servo"
+        :param root:
+        :param servo: "servo to be connected with created view"
+        :param settings_key:
+        :return: "a new servo data view"
+        """
         if servo is not None:
-            view = ServoDataView(root, servo, settings_key)
-        else:
-            view = MissingComponentView(DistanceSensor.__name__)
-        return view
+            return ServoDataView(root, servo, settings_key)
+        # return(new MissingValueView(Servo.class.getName(), false));
+        return MissingComponentView(DistanceSensor.__name__)
 
     def servo_position_changed(self):
         if self._value.is_valid():
@@ -29,256 +85,32 @@ class ServoDataView(SensorDataView):
             string += " °"
         else:
             string = "- °"
-        self._value_label['text'] = string
+        self._value_label.configure(text=string)
 
+    def update(self, servo: Servo) -> None:
+        self._value_label.configure(text=f"{servo.get_position_as_degree()}°")
+        self._at_max_flag.select() if servo.is_at_min() else self._at_max_flag.deselect()
+        self._active_flag.select() if servo.is_active() else self._active_flag.deselect()
+        self._stall_flag.select() if servo.is_stalling() else self._stall_flag.deselect()
+        self._is_on_flag.select() if servo.is_on() else self._is_on_flag.deselect()
 
-"""
-package de.hska.lat.robot.component.servo.view;
+    def force_feedback_on(self, servo: Servo) -> None:
+        raise ValueError("WIP")
 
+    def position_feedback_on(self, servo: Servo) -> None:
+        raise ValueError("WIP")
 
+    def is_active(self, servo: Servo) -> None:
+        self.update(servo)
 
+    def is_at_min(self, servo: Servo) -> None:
+        self.update(servo)
 
-import java.awt.Color;
-import java.awt.Insets;
+    def is_at_max(self, servo: Servo) -> None:
+        self.update(servo)
 
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
+    def is_stalling(self, servo: Servo) -> None:
+        self.update(servo)
 
-import de.hska.lat.robot.component.actor.servo.Servo;
-import de.hska.lat.robot.component.actor.servo.ServoChangeNotifier;
-import de.hska.lat.robot.component.view.ComponentView;
-import de.hska.lat.robot.value.view.MissingValueView;
-
-
-
-
-public class ServoDataView extends ComponentView  implements ServoChangeNotifier
-{
-
-	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5165802217514053434L;
-	
-	
-	private JLabel positionLabel;
-	private JCheckBox atMinFlag;
-	private JCheckBox atMaxFlag;
-	private JCheckBox isOnFlag;
-	private JCheckBox activeFlag;
-	private JCheckBox inverseFlag;
-	private JCheckBox stallFlag;
-
-
-	protected static final int width = 160;
-	protected static final int height = 90;
-	
-	
-public ServoDataView(Servo servo) 
-{
-	super(servo.getComponentName(), false);
-	
-	servo.addSensorListener(this);
-	buildView();
-
-
-}
-
-
-
-
-@Override
-protected void buildView() 
-{
-	
-	super.buildView();
-
-	
-	Insets insets = this.getBorder().getBorderInsets(this);
-	
-	
-	JLabel tmpLabel;
-	
-	tmpLabel=new JLabel("position");
-	tmpLabel.setBounds(insets.left+5,insets.top+5,50,20);
-	this.add(tmpLabel);
-	
-	positionLabel=new JLabel("--");
-	positionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	positionLabel.setBorder(new LineBorder(Color.black));
-	positionLabel.setBounds(insets.left+60,insets.top+5,40,20);
-	this.add(positionLabel);
-	
-	
-	
-	this.atMinFlag= new JCheckBox("min");
-	this.atMinFlag.setBounds(insets.left+5, insets.top+30,60,20);
-	this.atMinFlag.setEnabled(false);
-	this.add(this.atMinFlag);
-	
-	this.atMaxFlag= new JCheckBox("max");
-	this.atMaxFlag.setBounds(insets.left+85, insets.top+30,60,20);
-	this.atMaxFlag.setEnabled(false);
-	this.add(this.atMaxFlag);
-
-	
-	this.activeFlag= new JCheckBox("active");
-	this.activeFlag.setBounds(insets.left+5, insets.top+50,60,20);
-	this.activeFlag.setEnabled(false);
-	this.add(activeFlag);
-	
-	
-	this.isOnFlag= new JCheckBox("on");
-	this.isOnFlag.setBounds(insets.left+85, insets.top+50,60,20);
-	this.isOnFlag.setEnabled(false);
-	this.add(isOnFlag);
-
-	
-	inverseFlag= new JCheckBox("inverse");
-	inverseFlag.setBounds(insets.left+5,  insets.top+70,70,20);
-	inverseFlag.setEnabled(false);
-	this.add(inverseFlag);
-	
-	
-	this.stallFlag= new JCheckBox("stall");
-	this.stallFlag.setBounds(insets.left+85,  insets.top+70,60,20);
-	this.stallFlag.setEnabled(false);
-	this.add(stallFlag);
-	
-}
-
-
-
-
-@Override
-protected int getViewWidth()
-{
-	return(ServoDataView.width);
-}
-
-@Override
-protected int getViewHeight()
-{
-	return(ServoDataView.height);
-}
-
-
-
-
-protected void update(Servo servo)
-{
-	this.positionLabel.setText(servo.getPositionAsDegree()+"�");
-	this.atMaxFlag.setSelected(servo.isAtMin());
-	this.atMaxFlag.setSelected(servo.isAtMin());
-	this.activeFlag.setSelected(servo.isActive());
-	this.stallFlag.setSelected(servo.isStalling());
-	this.isOnFlag.setSelected(servo.isOn());
-}
-
-
-
-
-
-@Override
-public void servoPositionChanged(Servo servo)
-{
-	this.update(servo);
-
-
-}
-
-
-
-@Override
-public void isActive(Servo servo)
-{
-	this.update(servo);
-
-}
-
-
-
-@Override
-public void isAtMin(Servo servo)
-{
-	this.update(servo);
-}
-
-
-
-
-@Override
-public void isAtMax(Servo servo)
-{
-	this.update(servo);
-}
-
-
-
-@Override
-public void isStalling(Servo servo)
-{
-	this.update(servo);
-
-}
-
-
-
-@Override
-public void isOn(Servo servo)
-{
-	this.isOnFlag.setSelected(servo.isOn());
-	
-}
-
-
-
-
-@Override
-public void forceFeedbackOn(Servo servo)
-{
-	// TODO Auto-generated method stub
-	
-}
-
-
-
-
-@Override
-public void positionFeedbackOn(Servo servo)
-{
-	// TODO Auto-generated method stub
-	
-}
-
-/**
- * creates new servo data view and link it given servo 
- * @param servo servo to be connected with created view
- * @return a new servo data view
- */
-
-public static ComponentView createView(Servo servo)
-{
-
-	if (servo!=null)
-	{
-		return(new ServoDataView(servo));
-	}
-	else
-	{
-		return(new MissingValueView(Servo.class.getName(), false));
-	}
-}
-
-
-
-
-
-
-
-}
-"""
+    def is_on(self, servo: Servo) -> None:
+        self._is_on_flag.select() if servo.is_on() else self._is_on_flag.deselect()
