@@ -21,11 +21,18 @@ class RobotSettings:
     def get_key(key, default=None):
         return RobotSettings._settings.get(key, default)
 
+    recover_string = get_key
+    recover_int = get_int
+    recover_boolean = get_bool
+
     @staticmethod
     def set_key(key, value):
         RobotSettings._settings[key] = value
 
     add_setting = set_key
+    save_int = set_key
+    save_string = set_key
+    save_boolean = set_key
 
     @staticmethod
     def set_file_name(file_name):
