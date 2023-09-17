@@ -60,12 +60,10 @@ class RobotViewer:
         self.check_open_views()
         self._frame.mainloop()
 
-        """     
-        while(True):
-            self._frame.update_idletasks()
-            self._frame.update()
-            sleep(1)
-        """
+        # while(True):
+        #     self._frame.update_idletasks()
+        #     self._frame.update()
+        #     sleep(1)
 
         self.load_config()
 
