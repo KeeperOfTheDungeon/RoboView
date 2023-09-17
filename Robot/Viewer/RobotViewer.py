@@ -154,19 +154,19 @@ class RobotViewer:
     def check_open_views(self) -> None:
         if self.is_open_view("SerialConnectionView") and SerialConnection.get_ports():
             self.onOpenConectionWindow()
-        if self.is_open_view("DataHubDataView"):
+        if self.is_open_view("DataHubDataView") and self._robot.get_data_hub():
             self.show_data_hub_data()
-        if self.is_open_view("HeadSensorsDataView"):
+        if self.is_open_view("HeadSensorsDataView") and self._robot.get_head_sensors():
             self.show_head_sensors_data()
-        if self.is_open_view("LegSensorsDataView"):
+        if self.is_open_view("LegSensorsDataView") and self._robot.get_leg_sensors():
             self.show_leg_sensors_data()
-        if self.is_open_view("LegControllersDataView"):
+        if self.is_open_view("LegControllersDataView") and self._robot.get_leg_controller():
             self.show_leg_controller_data()
-        if self.is_open_view("LegSensorsControlView"):
+        if self.is_open_view("LegSensorsControlView") and self._robot.get_leg_sensors():
             self.show_leg_sensors_control()
-        if self.is_open_view("LegControllersControlView"):
+        if self.is_open_view("LegControllersControlView") and self._robot.get_leg_controller():
             self.show_leg_controller_control()
-        if self.is_open_view("LegControllerSetupView"):
+        if self.is_open_view("LegControllerSetupView") and self._robot.get_leg_controller():
             self.show_leg_controller_setup()
 
     @staticmethod

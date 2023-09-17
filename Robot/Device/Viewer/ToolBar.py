@@ -9,6 +9,7 @@ class ToolBar:
         self._root = root
 
         self._device = device
+        self._all_aquisators = self._device.get_data_aquisators() if self._device else []
 
         btn_ping = ctk.CTkButton(
             self._frame, text="ping", command=self.send_ping, width=30, height=25, corner_radius=5)
