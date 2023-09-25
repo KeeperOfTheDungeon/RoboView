@@ -2,7 +2,7 @@ from abc import abstractmethod
 # from time import sleep
 
 import tkinter as tk
-from typing import Optional
+# disabled for micropython  # from typing import Optional
 
 import customtkinter as ctk
 
@@ -42,8 +42,8 @@ class RobotViewer:
         self._robot = robot
         self._window_bar = WindowBar(self._frame)
 
-        self._connectionWindow: Optional[SerialConnectionView] = None
-        self._packet_logger_window: Optional[DataPacketLogView] = None
+        self._connectionWindow: "Optional[SerialConnectionView]" = None
+        self._packet_logger_window: "Optional[DataPacketLogView]" = None
         self.build_window()
 
     def build_window(self) -> None:

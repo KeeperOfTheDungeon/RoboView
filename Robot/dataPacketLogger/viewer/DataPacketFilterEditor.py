@@ -1,4 +1,4 @@
-from typing import Optional
+# disabled for micropython  # from typing import Optional
 
 import customtkinter as ctk
 from tkinter import ttk
@@ -20,9 +20,9 @@ class DataPacketFilterEditor(InternalWindow):
         # TODO this should either go upstream or be deleted
         self._frame.configure(bg="white")
 
-        self._robot: Optional[AbstractRobot] = None
-        self._table_model: Optional[FilterRuleTableModel] = None
-        self._toolbar: Optional[FilterEditorToolbar] = None
+        self._robot: "Optional[AbstractRobot]" = None
+        self._table_model: "Optional[FilterRuleTableModel]" = None
+        self._toolbar: "Optional[FilterEditorToolbar]" = None
 
         self.table: ttk.Treeview = self.build_view()
         self._toolbar.load_filter()

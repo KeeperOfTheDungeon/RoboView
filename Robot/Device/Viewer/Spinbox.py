@@ -1,12 +1,13 @@
 import customtkinter
-from typing import Union, Tuple, Callable, Optional
+# disabled for micropython  # from typing import Union, Tuple, Callable, Optional
+
 
 class Spinbox(customtkinter.CTkFrame):
     def __init__(self, *args,
                  width: int = 110,
                  height: int = 20,
-                 step_size: Union[int, float] = 1,
-                 command: Callable = None,
+                 step_size: "Union[int, float]" = 1,
+                 command: "Callable" = None,
                  **kwargs):
         super().__init__(*args, width=width, height=height, **kwargs)
 
@@ -50,7 +51,7 @@ class Spinbox(customtkinter.CTkFrame):
         except ValueError:
             return
 
-    def get(self) -> Union[int, None]:
+    def get(self) -> "Union[int, None]":
         try:
             return int(self.entry.get())
         except ValueError:

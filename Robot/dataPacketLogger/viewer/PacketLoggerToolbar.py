@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter.font import Font
-from typing import Optional
+# disabled for micropython  # from typing import Optional
 
 import customtkinter as ctk
 
@@ -17,7 +17,7 @@ class PacketLoggerToolbar(ctk.CTkFrame):
         super().__init__(master=master, *args, **kwargs)
         # TODO why does this have a title?
         # self.rename("Toolbar")
-        self.listener: Optional[DataPacketLogger] = None
+        self.listener: "Optional[DataPacketLogger]" = None
 
         self._data_width = tk.Variable(master, value=DisplayDataWidth_e.WIDTH_8)
         self._display_format = tk.Variable(master, value=DisplayFormat_e.DECIMAL)

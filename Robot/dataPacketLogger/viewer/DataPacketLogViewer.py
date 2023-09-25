@@ -1,5 +1,5 @@
 from tkinter import ttk
-from typing import Optional
+# disabled for micropython  # from typing import Optional
 
 import customtkinter as ctk
 
@@ -22,9 +22,9 @@ class DataPacketLogView(InternalWindow):
         super().__init__(root, self.FRAME_NAME, window_bar)
         self.root = root
 
-        self._robot: Optional[AbstractRobot] = None
-        self._packet_logger: Optional[DataPacketLogger] = None
-        self._toolbar: Optional[PacketLoggerToolbar] = None
+        self._robot: "Optional[AbstractRobot]" = None
+        self._packet_logger: "Optional[DataPacketLogger]" = None
+        self._toolbar: "Optional[PacketLoggerToolbar]" = None
 
         # TODO this should either go upstream or be deleted
         self._frame.configure(bg="white")
