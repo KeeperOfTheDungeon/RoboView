@@ -1,5 +1,9 @@
-from tkinter import LEFT, RIGHT, Button, Frame, Menu, Spinbox, StringVar, Tk
+from tkinter import LEFT, RIGHT, Menu, Spinbox
+from typing import List
+
 import customtkinter as ctk
+
+from RoboControl.Robot.Device.control.DataAquisator import DataAquisator
 from RoboView.Robot.Device.Viewer.Spinbox import Spinbox
 
 
@@ -9,7 +13,8 @@ class ToolBar:
         self._root = root
 
         self._device = device
-        self._all_aquisators = self._device.get_data_aquisators() if self._device else []
+        aquisators: List[DataAquisator] = self._device.get_data_aquisators() if self._device else []
+        self._all_aquisators: List[str] = [a.get_name() for a in aquisators]
 
         btn_ping = ctk.CTkButton(
             self._frame, text="ping", command=self.send_ping, width=30, height=25, corner_radius=5)
@@ -25,8 +30,8 @@ class ToolBar:
         self._period.set(1000)
         self._period.pack(side=LEFT)
 
-        self._aquisators = ctk.CTkComboBox(self._frame, values=self._all_aquisators, height=25)
-        self._aquisators.pack(side=LEFT)
+        self._aquisator = ctk.CTkComboBox(self._frame, values=self._all_aquisators, height=25)
+        self._aquisator.pack(side=LEFT)
 
         button = ctk.CTkButton(self._frame, text="On", width=30, height=25, corner_radius=5)
         button.configure(command=self.start_stream)
@@ -78,7 +83,7 @@ class ToolBar:
         pass
 
     def _get_selection_index(self) -> int:
-        selection = self._aquisators.get()
+        selection = self._aquisator.get()
         return self._all_aquisators.index(selection)
 
     def start_stream(self):
