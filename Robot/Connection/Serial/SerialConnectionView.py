@@ -35,7 +35,6 @@ class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements R
         self.root = root
 
         self._robot = None
-        self.connection: SerialConnection = SerialConnection()
         # TODO these aren't really optional
         self.connector: ctk.CTkButton = None
         self.port_selector: ctk.CTkComboBox = None
@@ -102,9 +101,9 @@ class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements R
     def connect(self, *_args) -> None:
         selected_port = self.port_selector.get()
         try:
-            self.connection.set_port(selected_port)
-            self.connection.set_data_packet_logger(self._robot.get_data_packet_logger())
-            self._robot.connect(self.connection)
+            self._robot._connection.set_port(selected_port)
+            self._robot._connection.set_data_packet_logger(self._robot.get_data_packet_logger())
+            self._robot.connect(self._robot._connection)
             self.connected(self._robot)
         except Exception as e:
             print(traceback.format_exc())
@@ -124,9 +123,9 @@ class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements R
         self.connector.configure(text=SerialConnectionView.DISCONNECT_TEXT, command=self.disconnect)
         self.pinger.configure(command=robot.get_data_hub().remote_ping_device, state="normal")
 
-    # FIXME why is a parameter required here ? (AbstractRobot.on_disconnected sends one)
+    # TODO why is a parameter required here
     def disconnect(self, *_args) -> None:
-        self.connection.disconnect()
+        self._robot._connection.disconnect()
         self._robot.disconnect()
         self.disconnected(self._robot)
 
