@@ -71,16 +71,18 @@ class ComponentView:
     def mouse_motion(self, event):
         x = self._frame.winfo_x()
         y = self._frame.winfo_y()
-        x = x - self._origin_x + event.x
-        y = y - self._origin_y + event.y
-        self._frame.place(x=x, y=y)
+        x1 = x - self._origin_x + event.x
+        y1 = y - self._origin_y + event.y
+        self._frame.place(x=x1, y=y1)
+        print ("motion")
 
         RobotSettings.set_key(self._settings_key + ".x_pos", x)
         RobotSettings.set_key(self._settings_key + ".y_pos", y)
 
     def mouse_released_frame(self, event):
         self._frame.unbind("<Motion>")
-
+        print ("released")
+        
     def mouse_released_data_frame(self, event):
         self._data_frame.unbind("<Motion>")
 
