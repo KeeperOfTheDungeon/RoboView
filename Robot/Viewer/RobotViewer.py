@@ -125,29 +125,7 @@ class RobotViewer:
     def show_data_hub_data(self) -> None:
         pass
 
-    @abstractmethod
-    def show_head_sensors_data(self) -> None:
-        pass
 
-    @abstractmethod
-    def show_leg_sensors_data(self) -> None:
-        pass
-
-    @abstractmethod
-    def show_leg_controller_data(self) -> None:
-        pass
-
-    @abstractmethod
-    def show_leg_sensors_control(self) -> None:
-        pass
-
-    @abstractmethod
-    def show_leg_controller_control(self) -> None:
-        pass
-
-    @abstractmethod
-    def show_leg_controller_setup(self) -> None:
-        pass
 
     def check_open_views(self) -> None:
         if self.is_open_view("SerialConnectionView") and SerialConnection.get_ports():
