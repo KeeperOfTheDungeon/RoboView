@@ -31,8 +31,10 @@ class LuxSensorDataView(SensorDataView):
         self._sensor.remote_get_value()
 
     def update(self):
+        if not self._value_label.winfo_exists():
+            return
         res = str(self._value.get_value()) if self._value.is_valid() else "-"
-        self._value_label.configure(text=f"{res}  lux")
+        self._value_label.configure(text=f"{res} lux")
         self._value_label.bind("<Button-1>", self.mouse_pressed_sensor)
         self._value_label.bind("<ButtonRelease-1>", self.mouse_released_value_label)
         self._value_label.bind("<Leave>", self.mouse_released_value_label)

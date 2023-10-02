@@ -127,6 +127,13 @@ class ComponentView:
             self._frame.place()
             self._data_frame.place(x=2, y=2)
 
+    def get_x(self) -> int:
+        return self._frame.winfo_x()
+
+    def get_y(self) -> int:
+        return self._frame.winfo_y()
+
+
 
 """package de.hska.lat.robot.component.view;
 

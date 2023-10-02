@@ -109,7 +109,7 @@ class ServoSetupView(ComponentSetupView):
     def change_reverse_status(self) -> None:
         raise ValueError("WIP")
 
-    def update_position(self, position: float) -> None:
+    def update_position(self, position: str) -> None:
         position = float(position)
         position = Radiant.convert_degree_to_radiant(position)
         self._actor.remote_move_servo_to(position)

@@ -83,8 +83,6 @@ class DataPacketLogView(InternalWindow):
 
     def save_column_width(self) -> None:
         for index, column_name in enumerate(self._packet_logger.column_names):
-            from rich import print
-            print(self.table.column(column_name))
             old_width = self.table.column(column_name)["width"]
             key = self._settings_key + self.COLUMN_WIDTH_KEY + str(index)
             RobotSettings.set_key(key, int(old_width))
