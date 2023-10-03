@@ -7,6 +7,7 @@ from RoboControl.Com.PacketLogger.DataPacketLogger import DataPacketLogger
 from RoboControl.Robot.AbstractRobot.AbstractListener import ChangeListener
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
+from RoboView.Robot.Ui.utils.colors import Color
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Robot.dataPacketLogger.viewer.PacketLoggerToolbar import PacketLoggerToolbar
@@ -48,7 +49,7 @@ class DataPacketLogView(InternalWindow, ChangeListener):
 
         self._packet_logger = DataPacketLogger()  # dummy logger
 
-        self._toolbar = PacketLoggerToolbar(main)
+        self._toolbar = PacketLoggerToolbar(main, bg_color="transparent", fg_color=Color.ANT_GRAY_1)
         self._toolbar.grid_propagate(False)
         self._toolbar.configure(height=PacketLoggerToolbar.HEIGHT)
         self._toolbar.grid(row=0, sticky="nwe")

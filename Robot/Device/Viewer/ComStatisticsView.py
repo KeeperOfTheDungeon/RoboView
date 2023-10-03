@@ -10,7 +10,7 @@ class ComStatisticsView(ComStatusListener):
     _context_menu: Menu
 
     def __init__(self, root, device):
-        self._frame = ctk.CTkFrame(master=root, fg_color='white', height=50, corner_radius=3)
+        self._frame = ctk.CTkFrame(master=root, fg_color='white', corner_radius=3, border_width=1)
         self._root = root
         self._device = device
 
@@ -31,27 +31,24 @@ class ComStatisticsView(ComStatusListener):
             "height": 12
         }
 
-        ctk.CTkLabel(self._frame, text="COM", **text_prop).pack(side=TOP)
+        ctk.CTkLabel(self._frame, text="COM", **text_prop).pack(side=TOP, padx=2, pady=(2, 0))
 
-        label = ctk.CTkLabel(self._frame, text="rx :",
-                             font=label_font, text_color='black')
-        label.pack(side=LEFT, padx=2)
-
+        ctk.CTkLabel(self._frame, text="rx:", **text_prop).pack(side=LEFT, padx=(5, 2))
         ctk.CTkLabel(
             self._frame, textvariable=self._rx_count, text=" - ", **text_prop
-        ).pack(side=LEFT, padx=(0, 10))
+        ).pack(side=LEFT, padx=(1, 5))
 
-        ctk.CTkLabel(self._frame, text="tx :", **text_prop).pack(side=LEFT, padx=2)
+        ctk.CTkLabel(self._frame, text="tx:", **text_prop).pack(side=LEFT, padx=(5, 2))
         ctk.CTkLabel(
             self._frame, textvariable=self._tx_count, text=" - ", **text_prop
-        ).pack(side=LEFT, padx=(0, 10))
+        ).pack(side=LEFT, padx=(1, 5))
 
-        ctk.CTkLabel(self._frame, text="lost :", **text_prop).pack(side=LEFT, padx=2)
+        ctk.CTkLabel(self._frame, text="lost:", **text_prop).pack(side=LEFT, padx=(5, 2))
         ctk.CTkLabel(
             self._frame, textvariable=self._lost_count, text=" - ", **text_prop
-        ).pack(side=LEFT, padx=(0, 10))
+        ).pack(side=LEFT, padx=(1, 5))
 
-        ctk.CTkLabel(self._frame, text="inv :", **text_prop).pack(side=LEFT, padx=2)
+        ctk.CTkLabel(self._frame, text="inv:", **text_prop).pack(side=LEFT, padx=(5, 2))
         ctk.CTkLabel(
             self._frame, textvariable=self._invalid_count, text=" - ", **text_prop
         ).pack(side=LEFT, padx=(0, 10))

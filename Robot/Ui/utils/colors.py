@@ -8,7 +8,12 @@ class RGB:
         return '#{:02X}{:02X}{:02X}'.format(self.r, self.g, self.b)
 
 
-class AllColors:
+class CustomColors:
+    ANT_GRAY_1 = RGB(240, 240, 240)
+    ANT_GRAY_2 = RGB(220, 220, 220)
+
+
+class ClassicColors:
     ALICE_BLUE = RGB(240, 248, 255)
     ANTIQUE_WHITE = RGB(250, 235, 215)
     AQUA = RGB(0, 255, 255)
@@ -178,8 +183,10 @@ class AllColors:
 
 
 class Color:
-    DARK_GRAY = AllColors.DARK_GRAY.as_hex()
-    BLACK = AllColors.BLACK.as_hex()
-    LIMEGREEN = AllColors.LIMEGREEN.as_hex()
-    PALE_VIOLETRED = AllColors.PALE_VIOLETRED.as_hex()
-    RED = AllColors.RED.as_hex()
+    ANT_GRAY_1 = CustomColors.ANT_GRAY_1.as_hex()
+    ANT_GRAY_2 = CustomColors.ANT_GRAY_2.as_hex()
+    DARK_GRAY = ClassicColors.DARK_GRAY.as_hex()
+    BLACK = ClassicColors.BLACK.as_hex()
+    LIMEGREEN = ClassicColors.LIMEGREEN.as_hex()
+    PALE_VIOLETRED = ClassicColors.PALE_VIOLETRED.as_hex()
+    RED = ClassicColors.RED.as_hex()

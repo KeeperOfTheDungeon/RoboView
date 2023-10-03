@@ -6,11 +6,14 @@ import customtkinter as ctk
 from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboControl.Robot.Device.control.DataAquisator import DataAquisator
 from RoboView.Robot.Device.Viewer.Spinbox import Spinbox
+from RoboView.Robot.Ui.utils.colors import Color
 
 
 class ToolBar:
     def __init__(self, root, device):
-        self._frame = ctk.CTkFrame(master=root, corner_radius=0, fg_color='grey15', border_width=1)
+        self._frame = ctk.CTkFrame(
+            master=root, corner_radius=3, fg_color=Color.ANT_GRAY_1, bg_color="transparent",
+        )
         self._root = root
 
         self._device = device
@@ -18,8 +21,9 @@ class ToolBar:
         self._all_aquisators: List[str] = [a.get_name() for a in aquisators]
 
         btn_ping = ctk.CTkButton(
-            self._frame, text="ping", command=self.send_ping, width=30, height=25, corner_radius=5)
-        btn_ping.pack(side=RIGHT)
+            self._frame, text="ping", command=self.send_ping, width=30, height=25, corner_radius=5,
+        )
+        btn_ping.pack(side=RIGHT, padx=5)
 
         self.build_view()
 
@@ -27,9 +31,11 @@ class ToolBar:
         self._device.remote_ping_device()
 
     def build_view(self):
-        self._period = Spinbox(self._frame, step_size=10, height=20, corner_radius=5, fg_color='#565b5e')
+        self._period = Spinbox(
+            self._frame, step_size=10, corner_radius=5, fg_color=Color.ANT_GRAY_2, height=32, width=125
+        )
         self._period.set(1000)
-        self._period.pack(side=LEFT)
+        self._period.pack(side=LEFT, padx=10)
 
         self._aquisators = ctk.CTkComboBox(self._frame, values=self._all_aquisators, height=25)
         self._aquisators.pack(side=LEFT)

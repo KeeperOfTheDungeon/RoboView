@@ -24,11 +24,13 @@ class PacketLoggerToolbar(ctk.CTkFrame):
 
     @staticmethod
     def make_panel(panel: ctk.CTkFrame) -> ctk.CTkFrame:
-        frame = ctk.CTkFrame(panel, border_color=Color.DARK_GRAY, border_width=1,
+        frame = ctk.CTkFrame(panel,
+                             fg_color=Color.ANT_GRAY_2,
+                             border_color=Color.DARK_GRAY, border_width=1,
                              height=PacketLoggerToolbar.HEIGHT - 10)
-        frame.grid_configure(padx=(5, 5), pady=(5, 5), ipady=5, ipadx=5)
+        frame.grid_configure(padx=(2, 2), pady=(5, 5), ipady=5, ipadx=5)
         frame.grid_rowconfigure(0, pad=10)
-        frame.grid_columnconfigure(0, pad=10)
+        frame.grid_columnconfigure(0, pad=20)
         return frame
 
     @staticmethod

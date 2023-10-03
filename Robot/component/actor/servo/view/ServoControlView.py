@@ -19,7 +19,7 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
     _actor: Servo
 
     def __init__(self, root, servo, settings_key):
-        super().__init__(root, servo, settings_key, 180, 140)
+        super().__init__(root, servo, settings_key, 190, 110)
         # self._value_label = Label(self._data_frame, text="0°", font=("Courier", 12))
         # self._value_label.place(x = 1, y = 2,  width=80, height=15)
 
@@ -45,11 +45,11 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
         actual_position_label = ctk.CTkLabel(
             self._data_frame, textvariable=self._actual_position, text="-°", width=40, height=20, anchor=ctk.W
         )
-        actual_position_label.place(x=inset_left + 120, y=inset_top + 80)
+        actual_position_label.place(x=inset_left + 120, y=inset_top + 55)
 
         self._state = BooleanVar()
         self._on_button = Checkbutton(self._data_frame, text="On", variable=self._state, command=self.change_status)
-        self._on_button.place(x=inset_left + 10, y=inset_top + 110, width=80, height=20)
+        self._on_button.place(x=inset_left + 140, y=inset_top + 70, width=80, height=20)
 
         self._position: int = None
         servo.add_setup_listener(self)
@@ -57,15 +57,15 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
 
         self._step_width = IntVar()
         step_label = ctk.CTkLabel(
-            self._data_frame, text="step width", width=80, height=20
+            self._data_frame, text="step", width=80, height=20
         )
-        step_label.place(x=inset_left + 100, y=inset_top + 75)
+        step_label.place(x=inset_left + 25, y=inset_top + 80)
         step_spinner = tk.Spinbox(
             self._data_frame, textvariable=self._step_width,
             from_=0, to=10, increment=1, width=4, font=Font(family="Helvetica", size=10),
             command=self.change_speed
         )
-        step_spinner.place(x=inset_left + 150, y=inset_top + 125)
+        step_spinner.place(x=inset_left + 105, y=inset_top + 103)
 
         # self._step_size: Spinner = None  # stepSize.setBounds(insets.left+160, insets.top+55, 100, 25);
         # self._step_width: StepWidthNumberModel = None

@@ -20,7 +20,7 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 class InternalWindow:
     def __init__(self, root: tk.Frame, name: str, window_bar: WindowBar):
         self._root = root
-        self._frame = tk.Frame(root, bg="gray", borderwidth=1, relief='solid')
+        self._frame = tk.Frame(root, bg="white", borderwidth=1, relief='solid')
         self._settings_key = self.__class__.__name__
         self._min_width = 200
         self._min_height = 150

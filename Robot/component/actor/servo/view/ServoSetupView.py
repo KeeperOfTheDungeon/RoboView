@@ -1,7 +1,6 @@
 from email.utils import decode_rfc2231
 from tkinter import HORIZONTAL, BooleanVar, Checkbutton, Label, Scale, Spinbox, StringVar
-
-from customtkinter import CTkLabel
+import customtkinter as ctk
 
 from RoboControl.Robot.AbstractRobot.AbstractListener import ServoSetupListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
@@ -22,7 +21,9 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         super().__init__(root, servo, settings_key, 250, 120)
         self._actor: Servo = servo
 
-        self._actual_position = CTkLabel(master=self._data_frame, text="?")
+        label_font = ctk.CTkFont(family="Arial", size=10)
+        
+        self._actual_position = ctk.CTkLabel(master=self._data_frame, text="?")
         self._position_slider = Scale(
             self._data_frame, from_=-100, to=100, orient=HORIZONTAL, command=self.update_position
         )
@@ -56,25 +57,34 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
 
         self._offset_var = StringVar()
         self._offset_var.set("0")
-        label = Label(self._data_frame, text="offset")
-        label.place(x=160, y=70, width=80, height=15)
+        label = ctk.CTkLabel(
+            self._data_frame, text="offset",
+            font=label_font, bg_color="transparent", width=80, height=15,
+        )
+        label.place(x=130, y=54)
         self._offset = Spinbox(
             self._data_frame, from_=0, to=10000, increment=1, textvariable=self._offset_var, width=10)
         self._offset.place(x=240, y=70, width=60, height=20)
 
         self._scale_var = StringVar()
         self._scale_var.set("0")
-        label = Label(self._data_frame, text="scale")
-        label.place(x=160, y=90, width=80, height=15)
-        self._scale = Spinbox(self._frame, from_=0, to=20000,
+        label = ctk.CTkLabel(
+            self._data_frame, text="scale",
+            font=label_font, bg_color="transparent", width=80, height=15,
+        )
+        label.place(x=130, y=72)
+        self._scale = Spinbox(self._data_frame, from_=0, to=20000,
                               increment=1, textvariable=self._scale_var, width=10)
         self._scale.place(x=240, y=90, width=60, height=20)
 
         self._speed_var = StringVar()
         self._speed_var.set("0")
-        label = Label(self._data_frame, text="speed")
-        label.place(x=160, y=110, width=80, height=15)
-        self._speed = Spinbox(self._frame, from_=0, to=52,
+        label = ctk.CTkLabel(
+            self._data_frame, text="speed",
+            font=label_font, bg_color="transparent", width=80, height=15,
+        )
+        label.place(x=130, y=90)
+        self._speed = Spinbox(self._data_frame, from_=0, to=52,
                               increment=0.28, textvariable=self._speed_var, width=10)
         self._speed.place(x=240, y=110, width=60, height=20)
 

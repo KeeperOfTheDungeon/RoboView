@@ -1,9 +1,10 @@
 import customtkinter as ctk
-from tkinter import LEFT, RIGHT, Frame
+from tkinter import LEFT, RIGHT
 
 from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboView.Robot.Device.Viewer.ComStatisticsView import ComStatisticsView
 from RoboView.Robot.Device.Viewer.CpuStatisticsView import CpuStatisticsView
+from RoboView.Robot.Ui.utils.colors import Color
 
 
 class StatusBar:
@@ -12,7 +13,7 @@ class StatusBar:
     _device: RobotDevice
 
     def __init__(self, root, device):
-        self._frame = Frame(master=root, bg='grey18', borderwidth=1)
+        self._frame = ctk.CTkFrame(master=root, bg_color='transparent', fg_color=Color.ANT_GRAY_1)
         self._root = root
         self.set_device(device)
 

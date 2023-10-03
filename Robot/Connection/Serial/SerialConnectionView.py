@@ -7,6 +7,7 @@ from RoboControl.Com.Connection.SerialConnection import SerialConnection
 from RoboControl.Robot.AbstractRobot.AbstractListener import ConnectionListener
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
+from RoboView.Robot.Ui.utils.colors import Color
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar
 from ant import Ant
@@ -58,7 +59,7 @@ class SerialConnectionView(InternalWindow, ConnectionListener):  # extends Displ
                   padx=(10, 20), pady=(30, 20),
                   ipadx=5, ipady=5)
 
-        port_selection = ctk.CTkFrame(form, bg_color="transparent", fg_color="#ebebeb")
+        port_selection = ctk.CTkFrame(form, bg_color="transparent", fg_color=Color.ANT_GRAY_1)
         port_selection.pack(pady=10, padx=10)
 
         ctk.CTkLabel(port_selection, text="Serial Port:").pack(pady=(10, 0), padx=10)

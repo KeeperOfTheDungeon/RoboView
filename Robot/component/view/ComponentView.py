@@ -1,5 +1,8 @@
-from tkinter import Frame, Label, Menu
+import tkinter
+from tkinter import Frame, Label, Menu, BOTTOM
 import customtkinter as ctk
+
+from RoboView.Robot.Ui.utils.colors import Color
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 
 
@@ -13,14 +16,35 @@ class ComponentView:
         self._settings_key = settings_key + "." + self.__class__.__name__ + "." + name
         self._display_name = RobotSettings.get_bool(self._settings_key + ".display_name")
 
-        self._frame = ctk.CTkFrame(master=root, fg_color="transparent", corner_radius=3, border_width=1)
-        self._frame.grid_columnconfigure("all", weight=1)
+        self._frame = ctk.CTkFrame(
+            master=root, corner_radius=3, border_width=1,
+            width=width, height=height,
+            fg_color=Color.ANT_GRAY_2,
+        )
+        self._frame.grid_columnconfigure("all", weight=1, pad=10)
+
+        self._header_frame = ctk.CTkFrame(
+            self._frame,
+            fg_color="transparent",
+            bg_color="transparent",
+        )
+        self._name_label = ctk.CTkLabel(
+            self._header_frame,
+            text=self._name, font=("Courier", 12),
+            text_color='black',
+        )
+        self._name_label.pack(side=BOTTOM)
 
         self._data_frame = ctk.CTkFrame(
             master=self._frame,
-            fg_color="#f0f0f0",
+            fg_color=Color.ANT_GRAY_1,
+            bg_color="white",
             corner_radius=3,
+            height=self._height,
+            width=width,
+            border_width=1,
         )
+        self._data_frame.grid(row=1)
 
         self._frame.bind("<Button-1>", self.mouse_pressed_frame)
         self._frame.bind("<ButtonRelease-1>", self.mouse_released_frame)
@@ -34,12 +58,6 @@ class ComponentView:
             frame.bind("<ButtonRelease-3>", self.show_context_menue)
 
         self.build_context_menue()
-        self._name_label = ctk.CTkLabel(
-            self._frame,
-            text=self._name, font=("Courier", 12),
-            fg_color='darkgrey', text_color='black',
-            corner_radius=3
-        )
 
         x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
         y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
