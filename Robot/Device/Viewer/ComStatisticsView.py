@@ -1,4 +1,4 @@
-from tkinter import TOP, LEFT, Menu, StringVar
+from tkinter import TOP, LEFT, Menu, StringVar, RIGHT
 import customtkinter as ctk
 import tkinter as tk
 
@@ -60,6 +60,11 @@ class ComStatisticsView(ComStatusListener):
 
         self._context_menu = Menu(self._frame, tearoff=0)
         self._context_menu.add_command(label="Clear com Statistic", command=self._device.remote_clear_com_statistics)
+        ctk.CTkButton(
+            self._frame, text="clear", width=30,
+            fg_color='lightgrey', text_color='black', hover_color='grey',
+            command=self._device.remote_clear_com_statistics
+        ).pack(side=RIGHT, padx=2)
 
     def mouse_released(self, event):
         try:
