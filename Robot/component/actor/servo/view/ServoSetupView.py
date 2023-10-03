@@ -3,6 +3,7 @@ from tkinter import HORIZONTAL, BooleanVar, Checkbutton, Label, Scale, Spinbox, 
 
 from customtkinter import CTkLabel
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import ServoSetupListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.RobotComponent import RobotComponent
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
@@ -12,7 +13,7 @@ from RoboView.Robot.component.view.ComponentSetupView import ComponentSetupView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 
 
-class ServoSetupView(ComponentSetupView):
+class ServoSetupView(ComponentSetupView, ServoSetupListener):
     CMD_ON	="cmdOn"
     CMD_FORCEFEEDBACK_ON	="cmdForceFeedOn"
     CMD_POSITIONFEEDBACK_ON	="cmdPosFeedOn"

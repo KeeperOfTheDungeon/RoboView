@@ -3,8 +3,9 @@ from tkinter.font import Font
 import customtkinter as ctk
 import tkinter as tk
 
-from tkinter import HORIZONTAL, W, BooleanVar, Checkbutton, Label, Scale, StringVar, IntVar
+from tkinter import HORIZONTAL, BooleanVar, Checkbutton, Scale, StringVar, IntVar
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import ServoDataListener, SetupListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.RobotComponent import RobotComponent
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
@@ -13,7 +14,7 @@ from RoboView.Robot.component.view.ActorControlView import ActorControlView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 
 
-class ServoControlView(ActorControlView):
+class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
     CMD_ACTIVE = "cmdActive"
     _actor: Servo
 

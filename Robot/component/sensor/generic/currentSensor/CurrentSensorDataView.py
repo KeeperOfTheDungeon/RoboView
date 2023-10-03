@@ -1,5 +1,6 @@
 from customtkinter import CTkLabel
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
+from RoboControl.Robot.Value.ComponentValue import ComponentValue
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
 
@@ -73,19 +74,16 @@ class CurrentSensorDataView(SensorDataView):
     def on_reset_total(self):
         self._sensor.remote_reset_total_current()
 
+    def component_value_changed(self, component_value: ComponentValue):
+        value = str(component_value.get_value()) if component_value.is_valid() else "-"
+        if component_value == self._actual_value:
+            self._actual_label.configure(text=f"{value}  c")
+        elif component_value == self._max_value:
+            self._max_label.configure(text=f"{value}  c")
+        elif component_value == self._total_value:
+            self._total_label.configure(text=f"{value}  c")
+
     def update(self):
-        self.update_actual()
-        self.update_max()
-        self.update_total()
-
-    def update_actual(self):
-        res = str(self._actual_value.get_value()) if self._actual_value.is_valid() else "-"
-        self._actual_label.configure(text=f"{res}  c")
-
-    def update_max(self):
-        res = str(self._max_value.get_value()) if self._max_value.is_valid() else "-"
-        self._max_label.configure(text=f"{res}  c")
-
-    def update_total(self):
-        res = str(self._total_value.get_value()) if self._total_value.is_valid() else "-"
-        self._total_label.configure(text=f"{res}  c")
+        self.component_value_changed(self._actual_value)
+        self.component_value_changed(self._max_value)
+        self.component_value_changed(self._total_value)

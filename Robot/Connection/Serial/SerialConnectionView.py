@@ -4,6 +4,7 @@ from tkinter import messagebox
 import customtkinter as ctk
 
 from RoboControl.Com.Connection.SerialConnection import SerialConnection
+from RoboControl.Robot.AbstractRobot.AbstractListener import ConnectionListener
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
@@ -11,7 +12,7 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 from ant import Ant
 
 
-class SerialConnectionView(InternalWindow):  # extends DisplayFrame implements RobotConnectionListener, ActionListener
+class SerialConnectionView(InternalWindow, ConnectionListener):  # extends DisplayFrame, ActionListener
     FRAME_NAME: str = "Serial Connection"
 
     CONNECT_TEXT: str = "Connect"

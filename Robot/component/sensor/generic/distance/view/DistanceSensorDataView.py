@@ -1,7 +1,9 @@
 from tkinter import StringVar
 
 from customtkinter import CTkLabel
+
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
+from RoboControl.Robot.Value.ComponentValue import ComponentValue
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
 
@@ -17,7 +19,7 @@ class DistanceSensorDataView(SensorDataView):
         self._value_label.place(x=10, y=5)
 
         self._value = self._sensor.get_distance_value()
-        self._value.add_listener(self.update)
+        self._value.add_listener(self)
         self.update()
 
     def build_context_menue(self):
@@ -30,13 +32,16 @@ class DistanceSensorDataView(SensorDataView):
             return MissingComponentView(DistanceSensor.__name__)
         return DistanceSensorDataView(root, distance_sensor, settings_key)
 
-    def update(self):
-        res = str(self._value.get_value()) if self._value.is_valid() else "-"
+    def component_value_changed(self, component_value: ComponentValue) -> None:
+        res = str(component_value.get_value()) if component_value.is_valid() else "-"
         self._value_label_var.set(f"{res} mm")
         if self._value_label.winfo_exists():
             self._value_label.bind("<Button-1>", self.mouse_pressed_sensor)
             self._value_label.bind("<ButtonRelease-1>", self.mouse_released_value_label)
             self._value_label.bind("<Leave>", self.mouse_released_value_label)
+
+    def update(self):
+        self.component_value_changed(self._value)
 
     def on_refresh(self):
         self._sensor.remote_get_distance()

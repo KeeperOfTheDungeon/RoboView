@@ -1,10 +1,12 @@
-
-from tkinter import TOP, LEFT, Frame, Label, Menu, W
+from tkinter import TOP, LEFT, Menu
 import customtkinter as ctk
 import tkinter as tk
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import ComStatusListener
+from RoboControl.Robot.Component.statistic.ComStatus import ComStatus
 
-class ComStatisticsView:
+
+class ComStatisticsView(ComStatusListener):
     def __init__(self, root, device):
         self._frame = ctk.CTkFrame(
             master=root, fg_color='white', height=50, corner_radius=3)
@@ -66,7 +68,7 @@ class ComStatisticsView:
         self._device.remote_clear_com_statistics()
         pass
 
-    def com_status_changed(self, statistic):
+    def com_status_changed(self, statistic: ComStatus):
         rx_count = statistic.get_recived_messages()
         self._rx_count['text'] = str(rx_count)
 

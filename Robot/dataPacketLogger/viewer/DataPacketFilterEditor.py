@@ -3,6 +3,7 @@ from typing import Optional
 import customtkinter as ctk
 from tkinter import ttk
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import ChangeListener
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Viewer.WindowBar import WindowBar
@@ -10,7 +11,7 @@ from RoboView.Robot.dataPacketLogger.viewer.FilterEditorToolbar import FilterEdi
 from RoboView.Robot.dataPacketLogger.viewer.FilterRuleTableModel import FilterRuleTableModel
 
 
-class DataPacketFilterEditor(InternalWindow):
+class DataPacketFilterEditor(InternalWindow, ChangeListener):
     FRAME_NAME: str = "Data packet filter editor"
 
     def __init__(self, root: ctk.CTkFrame, window_bar: WindowBar):

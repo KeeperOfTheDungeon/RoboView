@@ -1,9 +1,11 @@
-
-from tkinter import LEFT, RIGHT, TOP, Button, Frame, Label, Menu, W, E
+from tkinter import LEFT, RIGHT, TOP, Menu
 import customtkinter as ctk
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import CpuStatusListener
+from RoboControl.Robot.Component.statistic.CpuStatus import CpuStatus
 
-class CpuStatisticsView:
+
+class CpuStatisticsView(CpuStatusListener):
     def __init__(self, root, device):
         self._frame = ctk.CTkFrame(
             master=root, fg_color='white', height=50, corner_radius=3)
@@ -62,7 +64,7 @@ class CpuStatisticsView:
         self._device.remote_clear_cpu_statistics()
         pass
 
-    def cpu_status_changed(self, statistic):
+    def cpu_status_changed(self, statistic: CpuStatus):
         min_load = statistic.get_min_load()
         self._min_load['text'] = str(min_load)
 

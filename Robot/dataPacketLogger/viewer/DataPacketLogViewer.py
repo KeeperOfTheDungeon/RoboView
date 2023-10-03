@@ -4,6 +4,7 @@ from typing import Optional
 import customtkinter as ctk
 
 from RoboControl.Com.PacketLogger.DataPacketLogger import DataPacketLogger
+from RoboControl.Robot.AbstractRobot.AbstractListener import ChangeListener
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
@@ -11,7 +12,7 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Robot.dataPacketLogger.viewer.PacketLoggerToolbar import PacketLoggerToolbar
 
 
-class DataPacketLogView(InternalWindow):
+class DataPacketLogView(InternalWindow, ChangeListener):
     FRAME_NAME: str = "Packet Logger"
 
     COLUMN_WIDTH_KEY = ".columnWidth"

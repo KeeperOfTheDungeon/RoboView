@@ -2,13 +2,14 @@ import tkinter
 from tkinter import Label
 import customtkinter as ctk
 
+from RoboControl.Robot.AbstractRobot.AbstractListener import ServoDataListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
 
 
-class ServoDataView(SensorDataView):
+class ServoDataView(SensorDataView, ServoDataListener):
     def __init__(self, root, servo: Servo, settings_key):
         super().__init__(root, servo, settings_key, width=160, height=90)
         self.build_view()
@@ -78,7 +79,7 @@ class ServoDataView(SensorDataView):
         # return(new MissingValueView(Servo.class.getName(), false));
         return MissingComponentView(DistanceSensor.__name__)
 
-    def servo_position_changed(self):
+    def servo_position_changed(self, _servo: Servo):
         if self._value.is_valid():
             string = "{:.1f}".format(self._value.get_value_as_degree())
             # str()
