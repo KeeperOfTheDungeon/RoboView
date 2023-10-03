@@ -1,5 +1,9 @@
-from tkinter import LEFT, RIGHT, Button, Frame, Menu, Spinbox, StringVar, Tk
+from tkinter import LEFT, RIGHT, Menu, Spinbox
+from typing import List
+
 import customtkinter as ctk
+
+from RoboControl.Robot.Device.control.DataAquisator import DataAquisator
 from RoboView.Robot.Device.Viewer.Spinbox import Spinbox
 
 
@@ -9,7 +13,8 @@ class ToolBar:
         self._root = root
 
         self._device = device
-        self._all_aquisators = self._device.get_data_aquisators() if self._device else []
+        aquisators: List[DataAquisator] = self._device.get_data_aquisators() if self._device else []
+        self._all_aquisators: List[str] = [a.get_name() for a in aquisators]
 
         btn_ping = ctk.CTkButton(
             self._frame, text="ping", command=self.send_ping, width=30, height=25, corner_radius=5)
