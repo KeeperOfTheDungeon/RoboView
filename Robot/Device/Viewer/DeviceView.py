@@ -31,7 +31,7 @@ class DeviceView(InternalWindow):
         self._component_panel: tk.TkFrame
         self._display = None
         super().__init__(root, self.FRAME_NAME, window_bar)
-        self._display = tk.Frame(self._frame, bg="gray", borderwidth=1)
+        self._display = tk.Frame(self._frame, bg="#ebebeb", borderwidth=1)
         self._statusbar: StatusBar = StatusBar(self._frame, device)
         self._device: RobotDevice
         self.set_device("generic", device)
@@ -182,7 +182,7 @@ class DeviceView(InternalWindow):
             self._toolbar._frame.place(x=0, y=24)
 
         if hasattr(self, "_display") and self._display is not None:
-            self._display.configure(height=y_size - 90, width=x_size - 3)
+            self._display.configure(height=y_size - 130, width=x_size - 3)
             self._display.place(x=1, y=65)
 
     def auto_resize(self) -> None:
