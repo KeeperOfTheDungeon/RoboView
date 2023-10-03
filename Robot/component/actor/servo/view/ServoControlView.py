@@ -82,10 +82,10 @@ class ServoControlView(ActorControlView):
         minimum = Radiant.convert_radiant_to_degree(servo.get_min_range())
         maximum = Radiant.convert_radiant_to_degree(servo.get_max_range())
         self._min_pos.configure(text=f"{minimum:.2f}°")
-        self._position_slider.configure(from_=minimum)
-
         self._max_pos.configure(text=f"{maximum:.2f}°")
-        self._position_slider.configure(to=maximum)
+        if self._position_slider.winfo_exists():
+            self._position_slider.configure(from_=minimum)
+            self._position_slider.configure(to=maximum)
         # self._step_width.set_index(self._actor.get_speed())
 
     def state_changed(self, event: "ChangeEvent") -> None:

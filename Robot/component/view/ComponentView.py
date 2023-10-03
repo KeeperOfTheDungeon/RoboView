@@ -15,7 +15,7 @@ class ComponentView:
 
         self._data_frame = ctk.CTkFrame(
             master=self._frame,
-            fg_color="darkgrey",
+            fg_color="#f0f0f0",
             corner_radius=3,
         )
 

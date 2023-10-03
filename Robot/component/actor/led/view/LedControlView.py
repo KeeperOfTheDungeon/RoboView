@@ -9,12 +9,12 @@ class LedControlView(ActorControlView):
     _actor: Led
 
     def __init__(self, root, led, settings_key):
-        super().__init__(root, led, settings_key, 160, 70)
+        super().__init__(root, led, settings_key, 150, 70)
 
         self._brightness_slider = Scale(
             self._data_frame, from_=0, to=255, orient=HORIZONTAL, command=self.change_brightness
         )
-        self._brightness_slider.place(x=5, y=5, width=155, height=65)
+        self._brightness_slider.place(x=20, y=20, width=150, height=65)
         self._brightness_slider.bind("<Button-1>", self.mouse_pressed_sensor)
         self._brightness_slider.bind("<ButtonRelease-1>", self.mouse_released_value_label)
         self._brightness_slider.bind("<Leave>", self.mouse_released_value_label)
