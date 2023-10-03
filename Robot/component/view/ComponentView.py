@@ -91,7 +91,8 @@ class ComponentView:
         y = self._frame.winfo_y()
         x1 = x - self._origin_x + event.x
         y1 = y - self._origin_y + event.y
-        self._frame.place(x=x1, y=y1)
+        # WIP Moving components does not work correctly
+        # self._frame.place(x=x1, y=y1)
         print("motion")
 
         RobotSettings.set_key(self._settings_key + ".x_pos", x)
