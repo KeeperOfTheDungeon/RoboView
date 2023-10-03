@@ -3,6 +3,7 @@ from typing import List
 
 import customtkinter as ctk
 
+from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboControl.Robot.Device.control.DataAquisator import DataAquisator
 from RoboView.Robot.Device.Viewer.Spinbox import Spinbox
 
@@ -93,3 +94,9 @@ class ToolBar:
     def stop_stream(self):
         index = self._get_selection_index() + 1
         self._device.remote_stop_stream(index)
+
+    def get_frame(self):
+        return self._frame
+
+    def set_device(self, device: RobotDevice) -> None:
+        self._device = device
