@@ -131,7 +131,7 @@ class ServoControlView(ActorControlView):
         self._position_slider.configure(from_=min_range)
 
     def is_on(self, servo: Servo) -> None:
-        self._on_button.select() if servo.is_on() else self._on_button.deselect()
+        self._state.set(servo.is_on())
 
     def inverse(self, global_id: int, status: bool) -> None:
         pass

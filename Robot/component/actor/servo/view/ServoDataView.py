@@ -21,7 +21,7 @@ class ServoDataView(SensorDataView):
 
         insets_left = 0
         insets_top = 0
-        form = ctk.CTkFrame(fg_color="transparent", master=self._frame, width=160, height=110)
+        form = ctk.CTkFrame(fg_color="transparent", master=self._data_frame, width=160, height=110)
         form.grid_rowconfigure("all", weight=1)
         form.pack(fill="both", expand=True,
                   ipadx=5, ipady=5)

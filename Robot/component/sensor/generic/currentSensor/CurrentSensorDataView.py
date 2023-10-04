@@ -36,9 +36,9 @@ class CurrentSensorDataView(SensorDataView):
         self._max_value = self._sensor.get_max_value()
         self._total_value = self._sensor.get_total_value()
 
-        self._actual_value.add_listener(self.update_actual)
-        self._max_value.add_listener(self.update_max)
-        self._total_value.add_listener(self.update_total)
+        self._actual_value.add_listener(self)
+        self._max_value.add_listener(self)
+        self._total_value.add_listener(self)
 
         self.update()
 

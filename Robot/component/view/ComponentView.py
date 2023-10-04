@@ -5,13 +5,16 @@ from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 
 class ComponentView:
     def __init__(self, root: ctk.CTkFrame, name: str, settings_key: str, width: int, height: int):
-
-        self._settings_key = settings_key + "." + self.__class__.__name__ + "." + name
-
-        self._frame = ctk.CTkFrame(master=root, bg_color="grey15")
-        self._master = root
+        self._name = name
         self._width = width
         self._height = height
+        self._master = root
+
+        self._settings_key = settings_key + "." + self.__class__.__name__ + "." + name
+        self._display_name = RobotSettings.get_bool(self._settings_key + ".display_name")
+
+        self._frame = ctk.CTkFrame(master=root, fg_color="transparent", corner_radius=3, border_width=1)
+        self._frame.grid_columnconfigure("all", weight=1)
 
         self._data_frame = ctk.CTkFrame(
             master=self._frame,
@@ -19,31 +22,28 @@ class ComponentView:
             corner_radius=3,
         )
 
-        x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
-        y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
-        self._frame.place(x=x_pos, y=y_pos)
         self._frame.bind("<Button-1>", self.mouse_pressed_frame)
         self._frame.bind("<ButtonRelease-1>", self.mouse_released_frame)
         self._frame.bind("<Leave>", self.mouse_released_frame)
 
-        self._display_name = RobotSettings.get_bool(
-            self._settings_key + ".display_name")
-
         self._data_frame.bind("<Button-1>", self.mouse_pressed_data_frame)
-        self._data_frame.bind("<ButtonRelease-1>",
-                              self.mouse_released_data_frame)
+        self._data_frame.bind("<ButtonRelease-1>", self.mouse_released_data_frame)
         self._data_frame.bind("<Leave>", self.mouse_released_data_frame)
 
-        self._data_frame.bind("<ButtonRelease-3>", self.show_context_menue)
+        for frame in [self._header_frame, self._data_frame, self._name_label, self._frame]:
+            frame.bind("<ButtonRelease-3>", self.show_context_menue)
 
         self.build_context_menue()
-        self._name = name
         self._name_label = ctk.CTkLabel(
             self._frame,
             text=self._name, font=("Courier", 12),
             fg_color='darkgrey', text_color='black',
             corner_radius=3
         )
+
+        x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
+        y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
+        self._frame.place(x=x_pos, y=y_pos)
         self.draw()
 
     def build_context_menue(self):
@@ -74,20 +74,19 @@ class ComponentView:
         x1 = x - self._origin_x + event.x
         y1 = y - self._origin_y + event.y
         self._frame.place(x=x1, y=y1)
-        print ("motion")
+        print("motion")
 
         RobotSettings.set_key(self._settings_key + ".x_pos", x)
         RobotSettings.set_key(self._settings_key + ".y_pos", y)
 
     def mouse_released_frame(self, event):
         self._frame.unbind("<Motion>")
-        print ("released")
-        
+        print("released")
+
     def mouse_released_data_frame(self, event):
         self._data_frame.unbind("<Motion>")
 
     def show_context_menue(self, event):
-
         try:
             self._context_menue.tk_popup(event.x_root, event.y_root)
         finally:
@@ -98,9 +97,7 @@ class ComponentView:
 
     def on_display_name(self):
         self._display_name = not self._display_name
-
-        RobotSettings.set_key(self._settings_key +
-                              ".display_name", self._display_name)
+        RobotSettings.set_key(self._settings_key + ".display_name", self._display_name)
         self.draw()
 
     def get_view_width(self) -> int:
@@ -109,6 +106,20 @@ class ComponentView:
     def get_view_height(self) -> int:
         return self._height
 
+    def draw(self):
+        self._header_frame.grid(row=0, padx=1, pady=1) if self._display_name else self._header_frame.grid_forget()
+
+    def get_frame(self) -> ctk.CTkFrame:
+        return self._frame
+
+    def get_x(self) -> int:
+        return self._frame.winfo_x()
+
+    def get_y(self) -> int:
+        return self._frame.winfo_y()
+
+
+"""
     def draw(self):
 
         height = self._height
@@ -126,14 +137,7 @@ class ComponentView:
             self._frame.configure(width=width + 6, height=height + 6)
             self._frame.place()
             self._data_frame.place(x=2, y=2)
-
-    def get_x(self) -> int:
-        return self._frame.winfo_x()
-
-    def get_y(self) -> int:
-        return self._frame.winfo_y()
-
-
+"""
 
 """package de.hska.lat.robot.component.view;
 

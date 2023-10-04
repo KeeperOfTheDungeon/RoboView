@@ -37,39 +37,54 @@ class DeviceView(InternalWindow):
     _toolbar: ToolBar
     _statusbar: StatusBar
 
+    _form: ctk.CTkFrame
     _display: tk.Frame  # = component_panel: JPanel
     _toolbar_menu: "JCheckBoxMenuItem"
     _statusbar_menu: "JCheckBoxMenuItem"
 
     _device: RobotDevice
 
+    _robot_name = "generic"
+
     def __init__(self, root: ctk.CTkFrame, device: RobotDevice, window_bar: WindowBar):
         super().__init__(root, self.FRAME_NAME, window_bar)
-        self.set_device("generic", device)
+        self.build_panel()
+        self.display_window(self._robot_name, device)
+        self.set_device(self._robot_name, device)
+
+    def build_panel(self) -> None:
         self.set_min_dimension(600, 400)
+        self._form = ctk.CTkFrame(fg_color="transparent", master=self._frame)
+        self._form.pack(
+            fill="both", expand=True,
+            padx=(10, 15), pady=(25, 15),
+            ipadx=2, ipady=2
+        )
+        self._form.grid_columnconfigure(0, weight=10)
+        self._form.grid_rowconfigure(1, weight=1)
 
     def set_device(self, robot_name: str, device: RobotDevice) -> None:
         self._device = device
         self.rename(f"{device.get_name()}({robot_name})")  # setName & setTitle
-        self.display_window(robot_name, device)
+        self._toolbar.set_device(device)
+        self._statusbar.set_device(device)
 
     def display_window(self, robot_name: str, device: RobotDevice) -> None:
         # self.build_panel()
         self.build_main_menu()
 
-        self._toolbar = ToolBar(self._frame, device)
+        self._toolbar = ToolBar(self._form, device)
+        self._toolbar.get_frame().grid(row=0, sticky="ew", padx=2, pady=2, ipady=5)
         # self._toolbar.set_listener(device)
-        # self.add(self._toolbar)
         # self._toolbar.set_aquisators()
 
-        self._statusbar = StatusBar(self._frame, device)
-        # self.add(self._statusBar);
+        self._display = ctk.CTkFrame(self._form, border_width=1, fg_color="white")
+        self._display.grid(row=1, sticky="ewns")
 
-        self._display = tk.Frame(self._frame, bg="#ebebeb", borderwidth=1)
-        # this.componentPanel.setBorder(new LineBorder(Color.BLACK));
-        # this.add(this.componentPanel, BorderLayout.CENTER);
+        self._statusbar = StatusBar(self._form, device)
+        self._statusbar.get_frame().grid(row=2, sticky="ew", padx=2, pady=2, ipadx=2, ipady=2)
 
-        self.show_window()
+        # self.show_window()
 
     def make_error_display(self, name: str) -> None:
         self.rename(f"{name} - device not found")
@@ -205,23 +220,8 @@ class DeviceView(InternalWindow):
         # self._display.add(view)
         view._frame.place(x=x_pos, y=y_pos)
 
-    def resize_window(self):
-        InternalWindow.resize_window(self)
-        self._frame.update()
-        x_size = self._frame.winfo_width()
-        y_size = self._frame.winfo_height()
-
-        if hasattr(self, "_statusbar") and self._statusbar is not None:
-            self._statusbar._frame.configure(height=50, width=x_size - 24)
-            self._statusbar._frame.place(x=0, y=y_size - 60)
-
-        if hasattr(self, "_toolbar") and self._toolbar is not None:
-            self._toolbar._frame.configure(height=37, width=x_size)
-            self._toolbar._frame.place(x=0, y=24)
-
-        if hasattr(self, "_display") and self._display is not None:
-            self._display.configure(height=y_size - 130, width=x_size - 3)
-            self._display.place(x=1, y=65)
+    def get_frame(self):
+        return self._form
 
     def auto_resize(self) -> None:
         raise ValueError("WIP")

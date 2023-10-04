@@ -41,7 +41,7 @@ class ToolBar:
         button.configure(command=self.stop_stream)
         button.pack(side=LEFT)
 
-        self._root.bind("<ButtonRelease-3>", self.mouse_released)
+        self._frame.bind("<ButtonRelease-3>", self.mouse_released)
 
         self._context_menue = Menu(self._frame, tearoff=0)
         self._context_menue.add_command(

@@ -30,7 +30,7 @@ class ServoSetupView(ComponentSetupView):
         self._min_pos_var = StringVar()
         self._min_pos_var.set("0")
         self._min_Pos = Spinbox(
-            self._frame, from_=-90, to=90, increment=1,
+            self._data_frame, from_=-90, to=90, increment=1,
             textvariable=self._min_pos_var, width=10, command=self.update_position
         )
         self._min_Pos.place(x=5, y=30, width=40, height=20)
@@ -38,7 +38,7 @@ class ServoSetupView(ComponentSetupView):
         self._max_pos_var = StringVar()
         self._max_pos_var.set("0")
         self._max_Pos = Spinbox(
-            self._frame, from_=-90, to=90, increment=1, textvariable=self._max_pos_var, width=10)
+            self._data_frame, from_=-90, to=90, increment=1, textvariable=self._max_pos_var, width=10)
         self._max_Pos.place(x=260, y=30, width=40, height=20)
 
         self._state = BooleanVar()
@@ -58,7 +58,7 @@ class ServoSetupView(ComponentSetupView):
         label = Label(self._data_frame, text="offset")
         label.place(x=160, y=70, width=80, height=15)
         self._offset = Spinbox(
-            self._frame, from_=0, to=10000, increment=1, textvariable=self._offset_var, width=10)
+            self._data_frame, from_=0, to=10000, increment=1, textvariable=self._offset_var, width=10)
         self._offset.place(x=240, y=70, width=60, height=20)
 
         self._scale_var = StringVar()

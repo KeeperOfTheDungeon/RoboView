@@ -1,6 +1,7 @@
 
 from tkinter import TOP, LEFT, Frame, Label, Menu, W
 import customtkinter as ctk
+import tkinter as tk
 
 
 class ComStatisticsView:
