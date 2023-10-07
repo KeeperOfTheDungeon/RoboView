@@ -96,7 +96,7 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
 
     def update_position(self, position: int) -> None:
         self._position = position
-        self._actual_position.set(f"{position}°")
+        self._actual_position.set(f"{position:.2f}°")
 
     def update_values(self, servo: Servo) -> None:
         minimum = Radiant.convert_radiant_to_degree(servo.get_min_range())

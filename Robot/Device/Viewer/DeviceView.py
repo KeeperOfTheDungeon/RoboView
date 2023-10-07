@@ -1,14 +1,10 @@
 import customtkinter as ctk
 import tkinter as tk
 
-from RoboControl.Robot.AbstractRobot import AbstractDevice
-from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
-from RoboControl.Robot.AbstractRobot.Config.DeviceConfig import DeviceConfig
 from RoboControl.Robot.Device.RobotDevice import RobotDevice
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Device.Viewer.StatusBar import StatusBar
 from RoboView.Robot.Device.Viewer.ToolBar import ToolBar
-from RoboView.Robot.Ui.utils.colors import Color
 from RoboView.Robot.Viewer.WindowBar import WindowBar
 from RoboView.Robot.component.view.ComponentView import ComponentView
 

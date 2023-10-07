@@ -89,7 +89,7 @@ class ServoDataView(SensorDataView, ServoDataListener):
         self._value_label.configure(text=string)
 
     def update(self, servo: Servo) -> None:
-        self._value_label.configure(text=f"{servo.get_position_as_degree()}°")
+        self._value_label.configure(text=f"{servo.get_position_as_degree():.2f}°")
         self._at_max_flag.select() if servo.is_at_min() else self._at_max_flag.deselect()
         self._active_flag.select() if servo.is_active() else self._active_flag.deselect()
         self._stall_flag.select() if servo.is_stalling() else self._stall_flag.deselect()

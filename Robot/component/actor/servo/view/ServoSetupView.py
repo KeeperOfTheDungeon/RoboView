@@ -152,7 +152,7 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         )
 
     def servo_position_changed(self, servo: Servo) -> None:
-        self._actual_position.configure(text=f"{servo.get_position_as_degree()}°")
+        self._actual_position.configure(text=f"{servo.get_position_as_degree():.2f}°")
         self._position_slider.set(servo.get_position_as_degree())
 
     def servo_speed_changed(self, global_id: int, speed: int) -> None:
