@@ -16,9 +16,7 @@ class ServoDataView(SensorDataView, ServoDataListener):
 
     def build_view(self) -> None:
         # super().build_view()
-
-        self._value = self._sensor.get_position()
-        # self._value.add_listener(self.servo_position_changed)
+        self._sensor.add_sensor_listener(self)
 
         insets_left = 0
         insets_top = 0
@@ -31,9 +29,11 @@ class ServoDataView(SensorDataView, ServoDataListener):
         position_label.configure(width=50, height=20)
         position_label.place(x=insets_left + 5, y=insets_top + 5)
 
-        self._value_label = ctk.CTkLabel(master=form, text="--")  # centered # black border
-        self._value_label.configure(width=40, height=20)
-        self._value_label.place(x=insets_left + 60, y=insets_top + 5)
+        self._position_value = tkinter.StringVar()
+        value_label = ctk.CTkLabel(
+            master=form, textvariable=self._position_value, text="--", width=40, height=20
+        )  # centered # black border
+        value_label.place(x=insets_left + 60, y=insets_top + 5)
 
         self._at_min_flag = ctk.CTkCheckBox(master=form, text="min", command=print)
         self._at_min_flag.configure(width=60, height=20)
@@ -79,17 +79,9 @@ class ServoDataView(SensorDataView, ServoDataListener):
         # return(new MissingValueView(Servo.class.getName(), false));
         return MissingComponentView(DistanceSensor.__name__)
 
-    def servo_position_changed(self, _servo: Servo):
-        if self._value.is_valid():
-            string = "{:.1f}".format(self._value.get_value_as_degree())
-            # str()
-            string += " °"
-        else:
-            string = "- °"
-        self._value_label.configure(text=string)
-
     def update(self, servo: Servo) -> None:
-        self._value_label.configure(text=f"{servo.get_position_as_degree():.2f}°")
+        degree = servo.get_position_as_degree()
+        self._position_value.set(f"{degree:.2f}°")
         self._at_max_flag.select() if servo.is_at_min() else self._at_max_flag.deselect()
         self._active_flag.select() if servo.is_active() else self._active_flag.deselect()
         self._stall_flag.select() if servo.is_stalling() else self._stall_flag.deselect()
@@ -115,3 +107,6 @@ class ServoDataView(SensorDataView, ServoDataListener):
 
     def is_on(self, servo: Servo) -> None:
         self._is_on_flag.select() if servo.is_on() else self._is_on_flag.deselect()
+
+    def component_value_changed(self, servo: Servo) -> None:
+        self.update(servo)

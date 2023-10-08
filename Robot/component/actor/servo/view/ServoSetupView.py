@@ -22,8 +22,10 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         self._actor: Servo = servo
 
         label_font = ctk.CTkFont(family="Arial", size=10)
-        
-        self._actual_position = ctk.CTkLabel(master=self._data_frame, text="?")
+
+        self._actual_position = StringVar()
+        label = ctk.CTkLabel(master=self._data_frame, textvariable=self._actual_position, text="?", width=40, height=20)
+        label.place(x=20, y=85)
         self._position_slider = Scale(
             self._data_frame, from_=-100, to=100, orient=HORIZONTAL, command=self.update_position
         )
@@ -124,7 +126,7 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         position = float(position)
         position = Radiant.convert_degree_to_radiant(position)
         self._actor.remote_move_servo_to(position)
-        self._actual_position.configure(text=f"{position:.2f}°")
+        self._actual_position.set(f"{position:.2f}°")
 
     def update_values(self, servo: Servo) -> None:
         minimum = Radiant.convert_radiant_to_degree(servo.get_min_range())
@@ -152,7 +154,7 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         )
 
     def servo_position_changed(self, servo: Servo) -> None:
-        self._actual_position.configure(text=f"{servo.get_position_as_degree():.2f}°")
+        self._actual_position.set(f"{servo.get_position_as_degree():.2f}°")
         self._position_slider.set(servo.get_position_as_degree())
 
     def servo_speed_changed(self, global_id: int, speed: int) -> None:
@@ -190,6 +192,7 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
 
     def is_at_max(self, servo: Servo) -> None:
         pass
+
 
 
 
