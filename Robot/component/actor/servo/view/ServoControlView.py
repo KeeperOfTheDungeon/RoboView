@@ -20,9 +20,17 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
 
     def __init__(self, root, servo, settings_key):
         super().__init__(root, servo, settings_key, 190, 110)
-        # self._value_label = Label(self._data_frame, text="0°", font=("Courier", 12))
-        # self._value_label.place(x = 1, y = 2,  width=80, height=15)
 
+        self._position: int = None
+        servo.add_setup_listener(self)
+        servo.add_sensor_listener(self)
+
+        self.build_view()
+
+        self._actor.remote_get_settings()
+        self.update_values(servo)
+
+    def build_view(self) -> None:
         inset_left, inset_top = 0, 0
         self._position_slider = Scale(
             self._data_frame, from_=-100, to=100, orient=HORIZONTAL, command=self.change_position
@@ -33,44 +41,39 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
         min_pos_label = ctk.CTkLabel(
             self._data_frame, textvariable=self._min_pos, text="0°", width=40, height=20, anchor=ctk.W
         )
-        min_pos_label.place(x=inset_left + 20, y=inset_top + 55)
+        min_pos_label.place(x=inset_left + 10, y=inset_top + 55)
 
         self._max_pos = StringVar()
         max_pos_label = ctk.CTkLabel(
             self._data_frame, textvariable=self._max_pos, text="0°", width=40, height=20, anchor=ctk.W
         )
-        max_pos_label.place(x=inset_left + 120, y=inset_top + 55)
+        max_pos_label.place(x=inset_left + 130, y=inset_top + 55)
 
         self._actual_position = StringVar()
         actual_position_label = ctk.CTkLabel(
             self._data_frame, textvariable=self._actual_position, text="-°", width=40, height=20, anchor=ctk.W
         )
-        actual_position_label.place(x=inset_left + 120, y=inset_top + 55)
+        actual_position_label.place(x=inset_left + 75, y=inset_top + 55)
 
         self._state = BooleanVar()
-        self._on_button = Checkbutton(self._data_frame, text="On", variable=self._state, command=self.change_status)
-        self._on_button.place(x=inset_left + 140, y=inset_top + 70, width=80, height=20)
-
-        self._position: int = None
-        servo.add_setup_listener(self)
-        servo.add_sensor_listener(self)
+        on_button = ctk.CTkCheckBox(
+            self._data_frame, text="on", variable=self._state, height=3, width=3,
+        )
+        on_button.configure(command=self.change_status)
+        on_button.place(x=inset_left + 10, y=inset_top + 80)
 
         self._step_width = IntVar()
         step_label = ctk.CTkLabel(
-            self._data_frame, text="step", width=80, height=20
+            self._data_frame, text="step", height=20
         )
-        step_label.place(x=inset_left + 25, y=inset_top + 80)
+        step_label.place(x=inset_left + 90, y=inset_top + 81)
         step_spinner = tk.Spinbox(
             self._data_frame, textvariable=self._step_width,
             from_=0, to=10, increment=1, width=4, font=Font(family="Helvetica", size=10),
             command=self.change_speed
         )
-        step_spinner.place(x=inset_left + 105, y=inset_top + 103)
+        step_spinner.place(x=inset_left + 150, y=inset_top + 105)
 
-        # self._step_size: Spinner = None  # stepSize.setBounds(insets.left+160, insets.top+55, 100, 25);
-        # self._step_width: StepWidthNumberModel = None
-
-        self.update_values(servo)
 
     @staticmethod
     def create_view(root, servo, settings_key):
@@ -89,12 +92,12 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
         self._actor.remote_set_servo_speed(self._step_width.get())
 
     def change_position(self, position):
-        self.update_position(position)
         position = float(position)
+        self.update_position(position)
         position = Radiant.convert_degree_to_radiant(position)
         self._actor.remote_move_servo_to(position)
 
-    def update_position(self, position: int) -> None:
+    def update_position(self, position: float) -> None:
         self._position = position
         self._actual_position.set(f"{position:.2f}°")
 
@@ -111,15 +114,12 @@ class ServoControlView(ActorControlView, ServoDataListener, SetupListener):
     def servo_position_changed(self, servo: Servo):
         pass
 
-    @staticmethod
     def is_active(self, servo: int) -> None:
         print("'is_active is Not of your concern -> ignore'")
 
-    @staticmethod
     def is_stalling(self, servo: int) -> None:
         print("'is_stalling is Not of your concern -> ignore'")
 
-    @staticmethod
     def servo_offset_changed(self, servo: int, offset: int) -> None:
         print("'servo_offset_changed is Not of your concern -> ignore'")
 

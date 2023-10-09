@@ -1,4 +1,7 @@
-from tkinter import HORIZONTAL, Scale
+from tkinter import IntVar
+
+import customtkinter as ctk
+
 from RoboControl.Robot.Component.Actor.Led.Led import Led
 from RoboView.Robot.component.view.ActorControlView import ActorControlView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
@@ -11,10 +14,15 @@ class LedControlView(ActorControlView):
     def __init__(self, root, led, settings_key):
         super().__init__(root, led, settings_key, 150, 70)
 
-        self._brightness_slider = Scale(
-            self._data_frame, from_=0, to=255, orient=HORIZONTAL, command=self.change_brightness
+        self._brightness = IntVar()
+        self._brightness_slider = ctk.CTkSlider(
+            self._data_frame, from_=0, to=255, width=120, height=20, number_of_steps=255, variable=self._brightness
         )
-        self._brightness_slider.place(x=20, y=20, width=150, height=65)
+        ctk.CTkLabel(
+            master=self._data_frame, textvariable=self._brightness, text="?", width=40, height=20
+        ).place(x=60, y=40)
+        self._brightness_slider.configure(command=self.change_brightness)
+        self._brightness_slider.place(x=20, y=20)
         self._brightness_slider.bind("<Button-1>", self.mouse_pressed_sensor)
         self._brightness_slider.bind("<ButtonRelease-1>", self.mouse_released_value_label)
         self._brightness_slider.bind("<Leave>", self.mouse_released_value_label)

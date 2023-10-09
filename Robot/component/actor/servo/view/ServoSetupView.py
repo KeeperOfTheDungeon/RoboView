@@ -1,5 +1,5 @@
 from email.utils import decode_rfc2231
-from tkinter import HORIZONTAL, BooleanVar, Checkbutton, Label, Scale, Spinbox, StringVar
+from tkinter import HORIZONTAL, BooleanVar, Checkbutton, Label, Scale, Spinbox, StringVar, IntVar
 import customtkinter as ctk
 
 from RoboControl.Robot.AbstractRobot.AbstractListener import ServoSetupListener
@@ -11,12 +11,12 @@ from RoboControl.Robot.Math.Radiant import Radiant
 from RoboView.Robot.component.view.ComponentSetupView import ComponentSetupView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 
+CMD_ON = "cmdOn"
+CMD_FORCEFEEDBACK_ON = "cmdForceFeedOn"
+CMD_POSITIONFEEDBACK_ON = "cmdPosFeedOn"
+
 
 class ServoSetupView(ComponentSetupView, ServoSetupListener):
-    CMD_ON	="cmdOn"
-    CMD_FORCEFEEDBACK_ON	="cmdForceFeedOn"
-    CMD_POSITIONFEEDBACK_ON	="cmdPosFeedOn"
-
     def __init__(self, root, servo: Servo, settings_key):
         super().__init__(root, servo, settings_key, 250, 120)
         self._actor: Servo = servo
@@ -26,10 +26,13 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         self._actual_position = StringVar()
         label = ctk.CTkLabel(master=self._data_frame, textvariable=self._actual_position, text="?", width=40, height=20)
         label.place(x=20, y=85)
-        self._position_slider = Scale(
-            self._data_frame, from_=-100, to=100, orient=HORIZONTAL, command=self.update_position
+        self._position = IntVar()
+        self._position_slider = ctk.CTkSlider(
+            self._data_frame, from_=-100, to=100, variable=self._position,  # orient=HORIZONTAL
+            width=150, height=20, number_of_steps=25
         )
-        self._position_slider.place(x=50, y=10, width=200, height=40)
+        self._position_slider.configure(command=self.update_position)
+        self._position_slider.place(x=50, y=25)
 
         self._min_pos_var = StringVar()
         self._min_pos_var.set("0")
@@ -104,9 +107,12 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
 
         servo.add_sensor_listener(self)
         servo.add_setup_listener(self)
+        self._actor.remote_get_settings()
+        self._actor.remote_get_servo_speed()
 
     def build_context_menue(self):
         super().build_context_menue()
+        self._context_menue.add_command(label="get speed", command=self.remote_get_servo_speed)
         self._context_menue.add_command(label="set settings", command=self.on_set_settings)
 
     @staticmethod
@@ -135,8 +141,9 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
         self._max_pos_var.set(str(maximum))
         self._offset_var.set(str(servo.get_offset()))
         self._scale_var.set(str(servo.get_scale()))
-        self._position_slider.configure(from_=minimum, to=maximum)
         self._speed_var.set(str(servo.get_speed()))
+        if self._position_slider.winfo_exists():
+            self._position_slider.configure(from_=minimum, to=maximum)
 
     def servo_setup_changed(self, servo: Servo) -> None:
         self.update_values(servo)
@@ -155,7 +162,7 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
 
     def servo_position_changed(self, servo: Servo) -> None:
         self._actual_position.set(f"{servo.get_position_as_degree():.2f}°")
-        self._position_slider.set(servo.get_position_as_degree())
+        self._position.set(int(servo.get_position_as_degree()))
 
     def servo_speed_changed(self, global_id: int, speed: int) -> None:
         self._speed_var.set(str(speed))
@@ -192,6 +199,9 @@ class ServoSetupView(ComponentSetupView, ServoSetupListener):
 
     def is_at_max(self, servo: Servo) -> None:
         pass
+
+    def remote_get_servo_speed(self) -> bool:
+        return self._actor.remote_get_servo_speed()
 
 
 
