@@ -64,6 +64,9 @@ class ComponentView:
         self._frame.place(x=x_pos, y=y_pos)
         self.draw()
 
+    def build_view(self) -> None:
+        pass
+
     def build_context_menue(self):
         self._context_menue = Menu(self._frame, tearoff=0)
         self._context_menue.add_command(
