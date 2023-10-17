@@ -34,6 +34,7 @@ class ServoControlView(
         # // protected ServoControlInterface servoListener
 
         self._position_slider = ctk.CTkSlider(self._data_frame)  # private JSlider slider;
+        self._default_button_color = self._position_slider.cget("button_color")
         # private JSpinner stepSize;
 
         servo.add_setup_listener(self)
@@ -106,6 +107,12 @@ class ServoControlView(
         self._speed.set_index(servo.get_speed())  # this.speedSpinerModel.setIndex(servo.getSpeed());
         if self._position_slider.winfo_exists():
             self._position_slider.configure(from_=minimum, to=maximum)
+            if (maximum - minimum) < 1:
+                self._position_slider.configure(state="disabled")
+                self._position_slider.configure(button_color="gray")
+            else:
+                self._position_slider.configure(state="normal")
+                self._position_slider.configure(button_color=self._default_button_color)
 
     def servo_position_changed(self, servo: Servo):
         pass  # also empty in java
