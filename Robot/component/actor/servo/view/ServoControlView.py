@@ -5,7 +5,6 @@ import tkinter as tk
 
 from tkinter import HORIZONTAL, BooleanVar, StringVar
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import ServoDataListener, ServoSetupListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.RobotComponent import RobotComponent
 from RoboControl.Robot.Math.Radiant import Radiant
@@ -14,9 +13,7 @@ from RoboView.Robot.component.view.ActorControlView import ActorControlView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 
 
-class ServoControlView(
-    ActorControlView, ServoDataListener, ServoSetupListener
-):
+class ServoControlView(ActorControlView):
     _actor: Servo  # protected Servo servo;
 
     def __init__(self, root, servo, settings_key):

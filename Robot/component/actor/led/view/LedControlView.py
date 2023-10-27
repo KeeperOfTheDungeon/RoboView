@@ -2,7 +2,7 @@ from tkinter import IntVar
 
 import customtkinter as ctk
 
-from RoboControl.Robot.Component.Actor.Led.Led import Led
+from RoboControl.Robot.Component.Actor.Led import Led
 from RoboView.Robot.component.view.ActorControlView import ActorControlView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 

@@ -2,14 +2,13 @@ import tkinter
 from tkinter import Label
 import customtkinter as ctk
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import ServoDataListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
-from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
+from RoboControl.Robot.Component.Sensor.DistanceSensor import DistanceSensor
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
 
 
-class ServoDataView(SensorDataView, ServoDataListener):
+class ServoDataView(SensorDataView,):
     def __init__(self, root, servo: Servo, settings_key):
         super().__init__(root, servo, settings_key, width=160, height=90)
         self.build_view()

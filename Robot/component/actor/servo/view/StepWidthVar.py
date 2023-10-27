@@ -1,6 +1,5 @@
 from tkinter import StringVar
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import ChangeListener
 from RoboControl.Robot.Math.Radiant import Radiant
 
 
@@ -9,7 +8,7 @@ class StepWidthVar(StringVar):
         super().__init__()
         self._index = 0
         self._change = None
-        self._change_listeners: list[ChangeListener] = []
+        self._change_listeners = list()
 
     def has_changed(self) -> bool:
         if self._change:
@@ -35,13 +34,13 @@ class StepWidthVar(StringVar):
     def set(self, value: str) -> None:
         self.notify_listeners()
 
-    def get_next_value(self) -> str:
+    def get_next_value(self):
         if self._index < 180:
             self._index += 1
             self._change = True
         return self.output_text()
 
-    def get_previous_value(self) -> str:
+    def get_previous_value(self) :
         if self._index > 0:
             self._index -= 1
             self._change = True
@@ -53,8 +52,8 @@ class StepWidthVar(StringVar):
             change_listeners[index].on_change()
 
     # ---
-    def get_change_listeners(self) -> list[ChangeListener]:
+    def get_change_listeners(self) :
         return self._change_listeners
 
-    def add_change_listener(self, listener: ChangeListener) -> None:
+    def add_change_listener(self, listener) :
         self._change_listeners.append(listener)

@@ -1,5 +1,5 @@
 from customtkinter import CTkLabel
-from RoboControl.Robot.Component.generic.distance.DistanceSensor import DistanceSensor
+from RoboControl.Robot.Component.Sensor.DistanceSensor import DistanceSensor
 from RoboControl.Robot.Value.ComponentValue import ComponentValue
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView

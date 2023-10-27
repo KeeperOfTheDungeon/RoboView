@@ -2,11 +2,11 @@ from tkinter import TOP, LEFT, Menu, StringVar, RIGHT
 import customtkinter as ctk
 import tkinter as tk
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import ComStatusListener
-from RoboControl.Robot.Component.statistic.ComStatus import ComStatus
 
 
-class ComStatisticsView(ComStatusListener):
+
+
+class ComStatisticsView():
     _context_menu: Menu
 
     def __init__(self, root, device):
@@ -69,7 +69,7 @@ class ComStatisticsView(ComStatusListener):
         finally:
             self._context_menu.grab_release()
 
-    def com_status_changed(self, statistic: ComStatus) -> None:
+    def com_status_changed(self, statistic):
         self._rx_count.set(str(statistic.get_recived_messages()))
         self._tx_count.set(str(statistic.get_transfered_messages()))
         self._lost_count.set(str(statistic.get_lost_messages()))

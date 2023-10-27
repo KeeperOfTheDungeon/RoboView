@@ -6,7 +6,7 @@ from typing import Optional
 
 import customtkinter as ctk
 
-from RoboControl.Com.Connection.SerialConnection import SerialConnection
+from RoboControl.Com.SerialConnection import SerialConnection
 from RoboView.Robot.Connection.Serial.SerialConnectionView import SerialConnectionView
 from RoboView.Robot.Viewer.RobotSettings import RobotSettings
 from RoboView.Robot.Viewer.WindowBar import WindowBar

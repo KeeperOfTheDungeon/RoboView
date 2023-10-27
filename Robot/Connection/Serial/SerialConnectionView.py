@@ -3,8 +3,7 @@ from tkinter import messagebox
 
 import customtkinter as ctk
 
-from RoboControl.Com.Connection.SerialConnection import SerialConnection
-from RoboControl.Robot.AbstractRobot.AbstractListener import ConnectionListener
+from RoboControl.Com.SerialConnection import SerialConnection
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboView.Gui.InternalWindow.InternalWindow import InternalWindow
 from RoboView.Robot.Ui.utils.colors import Color
@@ -13,7 +12,7 @@ from RoboView.Robot.Viewer.WindowBar import WindowBar
 from ant import Ant
 
 
-class SerialConnectionView(InternalWindow, ConnectionListener):  # extends DisplayFrame, ActionListener
+class SerialConnectionView(InternalWindow):  # extends DisplayFrame, ActionListener
     FRAME_NAME: str = "Serial Connection"
 
     CONNECT_TEXT: str = "Connect"
@@ -89,7 +88,7 @@ class SerialConnectionView(InternalWindow, ConnectionListener):  # extends Displ
         auto_connect = RobotSettings.get_bool(auto_connect_key, default=False)
         self.auto_connect.select() if auto_connect else self.auto_connect.deselect()
 
-    def save_actual_port(self) -> None:
+    def save_actual_port(self, test) -> None:
         key = self._settings_key + SerialConnectionView.PORT_KEY
         RobotSettings.set_key(key, self.port_selector.get())
         RobotSettings.save_settings()

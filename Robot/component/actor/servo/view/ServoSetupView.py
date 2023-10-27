@@ -1,8 +1,6 @@
-from email.utils import decode_rfc2231
 from tkinter import BooleanVar, Checkbutton, Spinbox, StringVar, IntVar, DoubleVar
 import customtkinter as ctk
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import ServoSetupListener, ServoDataListener
 from RoboControl.Robot.Component.Actor.servo.Servo import Servo
 from RoboControl.Robot.Component.RobotComponent import RobotComponent
 from RoboControl.Robot.Math.Radiant import Radiant
@@ -11,15 +9,8 @@ from RoboView.Robot.component.actor.servo.view.StepWidthVar import StepWidthVar
 from RoboView.Robot.component.view.ComponentSetupView import ComponentSetupView
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 
-from logger import getLogger
 
-logger = getLogger(__name__)
-
-
-class ServoSetupView(
-    ComponentSetupView,  # ComponentSettingsView<Servo>
-    ServoSetupListener, ServoDataListener,
-):
+class ServoSetupView(ComponentSetupView):
     def __init__(self, root, servo: Servo, settings_key):
         super().__init__(root, servo, settings_key, 250, 120)
         self._actor: Servo = servo

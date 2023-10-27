@@ -1,11 +1,9 @@
 from tkinter import LEFT, RIGHT, TOP, Menu, StringVar
 import customtkinter as ctk
 
-from RoboControl.Robot.AbstractRobot.AbstractListener import CpuStatusListener
-from RoboControl.Robot.Component.statistic.CpuStatus import CpuStatus
 
 
-class CpuStatisticsView(CpuStatusListener):
+class CpuStatisticsView():
     _context_menu: Menu
 
     def __init__(self, root, device):
@@ -63,7 +61,7 @@ class CpuStatisticsView(CpuStatusListener):
         finally:
             self._context_menu.grab_release()
 
-    def cpu_status_changed(self, statistic: CpuStatus):
+    def cpu_status_changed(self, statistic):
         self._min_load.set(str(statistic.get_min_load()))
         self._max_load.set(str(statistic.get_max_load()))
         self._last_load.set(str(statistic.get_last_load()))
