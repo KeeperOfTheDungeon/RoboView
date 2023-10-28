@@ -5,7 +5,7 @@ import tkinter as tk
 
 from tkinter import HORIZONTAL, BooleanVar, StringVar
 
-from RoboControl.Robot.Component.Actor.servo.Servo import Servo
+from RoboControl.Robot.Component.Actor.Servo import Servo
 from RoboControl.Robot.Component.RobotComponent import RobotComponent
 from RoboControl.Robot.Math.Radiant import Radiant
 from RoboView.Robot.component.actor.servo.view.StepWidthVar import StepWidthVar

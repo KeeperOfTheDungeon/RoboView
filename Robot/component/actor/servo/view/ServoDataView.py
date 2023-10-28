@@ -2,7 +2,7 @@ import tkinter
 from tkinter import Label
 import customtkinter as ctk
 
-from RoboControl.Robot.Component.Actor.servo.Servo import Servo
+from RoboControl.Robot.Component.Actor.Servo import Servo
 from RoboControl.Robot.Component.Sensor.DistanceSensor import DistanceSensor
 from RoboView.Robot.component.view.MissingComponentView import MissingComponentView
 from RoboView.Robot.component.view.SensorDataView import SensorDataView
