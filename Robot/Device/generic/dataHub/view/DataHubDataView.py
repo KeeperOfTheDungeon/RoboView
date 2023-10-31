@@ -16,7 +16,7 @@ class DataHubDataView(DeviceView):
         super().__init__(root, device, window_bar)
 
     def set_robot(self, robot: AbstractRobot) -> bool:
-        sensors: DataHub = robot.get_device_on_name(AntDeviceConfig.MAIN_DATA_HUB.get_name())
+        sensors: DataHub = robot.get_device_on_name(AntDeviceConfig.MAIN_DATA_HUB["DeviceName"])
         if sensors is None:
             messagebox.showerror("Error", "No leg controllers available!")
             return False
