@@ -2,7 +2,7 @@ from tkinter import messagebox
 
 import customtkinter as ctk
 
-from Devices.AntDeviceConfig import AntDeviceConfig
+from Config.AntConfig import AntDeviceConfig
 from RoboControl.Robot.AbstractRobot.AbstractRobot import AbstractRobot
 from RoboControl.Robot.Device.Generic.DataHub.DataHub import DataHub
 from RoboView.Robot.Viewer.WindowBar import WindowBar
