@@ -1,6 +1,6 @@
 from tkinter import TOP, LEFT, Menu, StringVar, RIGHT
 import customtkinter as ctk
-import tkinter as tk
+
 
 
 

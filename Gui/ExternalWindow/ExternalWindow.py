@@ -1,6 +1,5 @@
 from tkinter import Toplevel, Frame, LEFT, BOTTOM
-import customtkinter as ctk
-from RoboView.Robot.Viewer.RobotSettings import RobotSettings
+
 
 from RoboView.Robot.Device.Viewer.StatusBar import StatusBar
 from RoboView.Robot.Device.Viewer.ToolBar import ToolBar

@@ -62,7 +62,14 @@ class ComponentView:
         x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
         y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
         self._frame.place(x=x_pos, y=y_pos)
+
         self.draw()
+        x_pos+=10
+        y_pos+=10
+        
+        self._frame.place(x=x_pos, y=y_pos)
+        self._frame.place(x=x_pos, y=y_pos)
+        self._frame.place(x=x_pos, y=y_pos)
 
     def build_view(self) -> None:
         pass
@@ -92,12 +99,21 @@ class ComponentView:
     def mouse_motion(self, event):
         x = self._frame.winfo_x()
         y = self._frame.winfo_y()
-        x1 = x - self._origin_x + event.x
-        y1 = y - self._origin_y + event.y
+        #x1 = x - self._origin_x + event.x
+        #y1 = y - self._origin_y + event.y
         # WIP Moving components does not work correctly
-        # self._frame.place(x=x1, y=y1)
+
+        print(x, ": ", y)
+
+        #print(event.x, ": ", event.y)
+        self._frame.pack_forget()
+        self._frame.place(x=x, y=y)
+        #self._frame.place(x=x, y= y)
+        #self._frame.place(relx=0.5, rely=0.5)
         print("motion")
 
+        print(self._frame.winfo_x(), " : ", self._frame.winfo_y())
+        self.draw()
         RobotSettings.set_key(self._settings_key + ".x_pos", x)
         RobotSettings.set_key(self._settings_key + ".y_pos", y)
 

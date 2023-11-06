@@ -1,5 +1,4 @@
 from tkinter import Canvas, Frame, Button, Toplevel
-import customtkinter as ctk
 
 
 class WindowTitle():
