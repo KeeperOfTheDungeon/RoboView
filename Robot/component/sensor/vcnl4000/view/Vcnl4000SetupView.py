@@ -1,11 +1,9 @@
 import customtkinter as ctk
 
 from Devices.LegSensors.LegSensors import LegSensors
-from RoboControl.Robot.AbstractRobot.AbstractListener import SetupListener
-from RoboControl.Robot.Component.Sensor.vcnl4000.Vcnl4000 import Vcnl4000
-from RoboView.Robot.Device.Viewer.DeviceView import DeviceView
+
+from RoboControl.Robot.Component.Sensor import Vcnl4000
 from RoboView.Robot.component.view.ComponentSetupView import ComponentSetupView
-from RoboView.Robot.component.view.ComponentView import ComponentView
 
 AVERAGING_TEXT = "averaging"
 AUTO_COMPENSATION_TEXT = "auto offset"
