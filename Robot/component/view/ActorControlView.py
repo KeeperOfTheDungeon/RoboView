@@ -6,8 +6,8 @@ class ActorControlView(ComponentView):
         super().__init__(root, actor.get_name(), settings_key, width, height)
         self._actor = actor
 
-    def build_context_menue(self):
-        super().build_context_menue()
+    def build_context_menu(self):
+        super().build_context_menu()
         self._context_menue.add_command(label="get settings", command=self.on_get_settings)
         self._context_menue.add_command(label="load defaults", command=self.on_load_defaults)
         self._context_menue.add_command(label="save defaults", command=self.on_save_defaults)

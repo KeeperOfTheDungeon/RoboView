@@ -49,8 +49,8 @@ class CurrentSensorDataView(SensorDataView):
 
         self.update()
 
-    def build_context_menue(self):
-        super().build_context_menue()
+    def build_context_menu(self):
+        super().build_context_menu()
         self._context_menue.add_command(label="refresh actual", command=self.on_refresh)
         self._context_menue.add_command(label="refresh max", command=self.on_refresh_max)
         self._context_menue.add_command(label="refresh total", command=self.on_refresh_total)

@@ -8,8 +8,8 @@ class ComponentSetupView(ComponentView):
 
     # self._name = component.get_name()
 
-    def build_context_menue(self):
-        super().build_context_menue()
+    def build_context_menu(self):
+        super().build_context_menu()
         self._context_menue.add_command(label="get settings", command=self.on_get_settings)
         self._context_menue.add_command(label="set settings", command=self.on_set_settings)
         self._context_menue.add_command(label="load defaults", command=self.on_load_defaults)

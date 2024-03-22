@@ -22,8 +22,8 @@ class DistanceSensorDataView(SensorDataView):
         self._value.add_listener(self)
         self.update()
 
-    def build_context_menue(self):
-        super().build_context_menue()
+    def build_context_menu(self):
+        super().build_context_menu()
         self._context_menue.add_command(label="refresh distance", command=self.on_refresh)
 
     @staticmethod

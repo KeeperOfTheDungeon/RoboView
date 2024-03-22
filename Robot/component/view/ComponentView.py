@@ -57,7 +57,7 @@ class ComponentView:
         for frame in [self._header_frame, self._data_frame, self._name_label, self._frame]:
             frame.bind("<ButtonRelease-3>", self.show_context_menue)
 
-        self.build_context_menue()
+        self.build_context_menu()
 
         x_pos = RobotSettings.get_int(self._settings_key + ".x_pos")
         y_pos = RobotSettings.get_int(self._settings_key + ".y_pos")
@@ -74,7 +74,7 @@ class ComponentView:
     def build_view(self) -> None:
         pass
 
-    def build_context_menue(self):
+    def build_context_menu(self):
         self._context_menue = Menu(self._frame, tearoff=0)
         self._context_menue.add_command(
             label="display name", command=self.on_display_name
